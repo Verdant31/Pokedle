@@ -11,8 +11,7 @@ datasource db {
 }
 
 model DailyPokemon {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  pokemonId String
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  pokemonId Int
   name      String
-  createdAt DateTime @default(now())
 }
