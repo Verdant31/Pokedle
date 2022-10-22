@@ -11,7 +11,7 @@ const Classic: React.FC = () => {
 
   const handleSearchFirstPokemon = (e: FormEvent) => {
     e.preventDefault()
-    fetch("http://localhost:3000/api/updateDailyPokemon")
+    fetch("http://localhost:3000/api/dailypoke/1")
   }
 
   return (
