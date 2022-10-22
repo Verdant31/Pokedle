@@ -6,12 +6,13 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model DailyPokemon {
-  id         String   @id
-  name       String
-  selectedAt DateTime
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  pokemonId String
+  name      String
+  createdAt DateTime @default(now())
 }

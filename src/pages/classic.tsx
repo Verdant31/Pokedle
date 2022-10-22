@@ -5,13 +5,13 @@ import { FormEvent, useRef } from 'react';
 import { trpc } from '../utils/trpc';
 
 const Classic: React.FC = () => {
-  const pokemon = trpc.pokemon.getDailyPokemon.useQuery();
+  // const pokemon = trpc.pokemon.getDailyPokemon.useQuery();
   
   const pokeName = useRef<HTMLInputElement>(null)
 
   const handleSearchFirstPokemon = (e: FormEvent) => {
     e.preventDefault()
-    // fetch("http://localhost:3000/api/examples")
+    fetch("http://localhost:3000/api/updateDailyPokemon")
   }
 
   return (
