@@ -1,10 +1,8 @@
-// import { trpc } from "../utils/trpc";
 import CardSelection from "../components/CardSelection";
 import { useRouter } from "next/router";
 
 const Home: React.FunctionComponent = () => {
   const router = useRouter();
-  // const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
   return (
     <div>
       <h1 className="text-2xl mt-12 ">Adivinhe pokemons de todas as gerações!</h1>
