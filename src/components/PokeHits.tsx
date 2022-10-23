@@ -3,7 +3,7 @@ import { CaretDoubleLeft, CaretDoubleRight, Equals } from 'phosphor-react';
 import * as React from 'react';
 import { Pokemon } from '../@types';
 import { ComparedPokemons, comparePokemons } from '../utils/comparePokemons';
-
+import { motion } from 'framer-motion';
 interface IPokeHitsProps {
     chosenPokemon: Pokemon;
     dailyPokemon: Pokemon;
@@ -11,19 +11,18 @@ interface IPokeHitsProps {
 
 const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, dailyPokemon}) => {
     const compared : ComparedPokemons = comparePokemons(chosenPokemon, dailyPokemon);
-    if(compared.win) console.log("GANHOU PORRA");
+     
     return (
-    <div className="flex justify-center  gap-x-2">
-        <div className="w-28 h-28">
-            <p>Pokemon</p>
-            <div className="w-full h-1 bg-yellow-500 my-4"/>
-            <div className="h-24 w-full flex items-center justify-center">
+    <motion.div
+        initial={{y:-30, opacity: 1}}
+        className="flex justify-center relative gap-x-2"
+    >
+        <div className="w-28 ">
+            <div className="h-24 w-full flex items-center justify-end">
                 <Image src={chosenPokemon.image} height={900} width={900} alt="Picture of chosen pokemon" />
             </div>
         </div>
         <div className="w-24 ">
-            <p>Abilities</p>
-            <div className="w-full h-1 bg-yellow-500 my-4"/>
             <div style={{backgroundColor: compared.abilities.color}} className={`h-20 w-full flex items-center justify-center `}>
                 {compared.abilities.message === "None" 
                     ? <p className="text-white text-sm font-semibold">None in common</p>
@@ -38,8 +37,6 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, daily
             </div>
         </div>
         <div className="w-24 ">
-            <p>Moves</p>
-            <div className="w-full h-1 bg-yellow-500 my-4"/>
             <div style={{backgroundColor: compared.moves.color}} className={`h-20  w-full flex items-center justify-center`}>
                 {compared.moves.message === "None" 
                     ? <p className="text-white text-lg font-semibold">None in common</p>
@@ -52,8 +49,6 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, daily
             </div>
         </div>
         <div className="w-24 ">
-            <p>Types</p>
-            <div className="w-full h-1 bg-yellow-500 my-4"/>
             <div style={{backgroundColor: compared.types.color}} className={`h-20 w-full flex items-center justify-center `}>
                 {compared.types.message === "None" 
                     ? <p className="text-white text-sm font-semibold">None in common</p>
@@ -68,8 +63,6 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, daily
             </div>
         </div>
         <div className="w-24 ">
-            <p>Weight</p>
-            <div className="w-full h-1 bg-yellow-500 my-4"/>
             <div style={{backgroundColor: compared.weight.color}} className={`h-20 w-full flex items-center justify-center `}>
                 <div className="flex flex-col space-y-2 items-center">
                     {compared.weight.message === "Less" && (<CaretDoubleLeft size={32} />)}
@@ -80,8 +73,6 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, daily
             </div>
         </div>
         <div className="w-24 ">
-            <p>Height</p>
-            <div className="w-full h-1 bg-yellow-500 my-4"/>
             <div  style={{backgroundColor: compared.height.color}} className={`h-20 w-full flex items-center justify-center `}>
                 <div className="flex flex-col space-y-2">
                     {compared.height.message === "Less" && (<CaretDoubleLeft size={32} />)}
@@ -93,8 +84,6 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, daily
         </div>
         {compared.stats.map((stat) => (
             <div className="w-24" key={stat.name}>
-                <p className="capitalize">{stat.name}</p>
-                <div className="w-full h-1 bg-yellow-500 my-4"/>
                 <div  style={{backgroundColor: stat.color}} className={`h-20 w-full flex items-center justify-center `}>
                     <div className="flex flex-col space-y-2">
                         {stat.message === "Less" && (<CaretDoubleLeft size={32} />)}
@@ -106,7 +95,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, daily
             </div>
         ))}
         
-    </div>
+    </motion.div>
   )
 };
 

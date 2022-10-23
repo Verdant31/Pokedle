@@ -59,5 +59,6 @@ export const comparePokemons = (pokemon: Pokemon, dailyPokemon: Pokemon) : Compa
         stats: statsCompare
     }
     const win = isSamePokemon(compared);
+    
     return {...compared, win }
 }

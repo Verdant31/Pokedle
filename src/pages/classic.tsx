@@ -10,6 +10,7 @@ import { trpc } from '../utils/trpc';
 import PokeHits from '../components/PokeHits';
 import { pokeDto } from '../utils/pokeDto';
 import { api } from '../services/api';
+import CardTitle from '../components/CardTitle';
 interface ClassicProps {
   dailyPokemon: Pokemon
 }
@@ -61,11 +62,22 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
             <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
           </button>
         </form>
-        <div className="flex flex-col items-center space-y-6 mt-8">
-          {chosenPokemons.length > 0 && chosenPokemons.slice(0).reverse().map((chosenPokemon) => (
-              <PokeHits key={chosenPokemon.name} chosenPokemon={chosenPokemon} dailyPokemon={dailyPokemon} />
-          ))}
-        </div>
+          <div className="flex justify-end items-center gap-x-2 mt-8 ">
+            <CardTitle>Pokemon</CardTitle>
+            <CardTitle>Abilities</CardTitle>
+            <CardTitle>Moves</CardTitle>
+            <CardTitle>Types</CardTitle>
+            <CardTitle>Weight</CardTitle>
+            <CardTitle>Height</CardTitle>
+            <CardTitle>Hp</CardTitle>
+            <CardTitle>Attack</CardTitle>
+            <CardTitle>Speed</CardTitle>
+          </div>
+          <div className="flex flex-col items-center mt-8">
+            {chosenPokemons.length > 0 && chosenPokemons.slice(0).reverse().map((chosenPokemon) => (
+                <PokeHits key={chosenPokemon.name} chosenPokemon={chosenPokemon} dailyPokemon={dailyPokemon} />
+            ))}
+          </div>
       </motion.div>
     </div>
   )
