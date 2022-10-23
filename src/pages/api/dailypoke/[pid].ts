@@ -7,11 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { pid } = req.query;
   try {
     const { name, id } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pid}`).then((res) => res.data)
-    const newDailyPoke = await prisma.dailyPokemon.create({data:{name, pokemonId: id}})
-    console.log(newDailyPoke);
-    res.status(200).json({as: 'hehe'})
-  }catch(err: any) {
+    await prisma.dailyPokemon.create({data:{name, pokemonId: id}})
+    res.status(200).json({message: 'Novo pokemon do dia adicionado com sucesso.'})
+  }catch(err) {
     console.log(err);
   }
-
 }
