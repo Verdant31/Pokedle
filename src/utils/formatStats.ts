@@ -1,11 +1,6 @@
-import { Stat } from "../@types";
+import type  { CommonStatsCompare, Stat } from "../@types";
 
-export type CommonStatsCompare  = {
-    name: string;
-    attributes: number,
-    message: string
-    color: string
-}
+
 
 export const formatStats = ( 
     dailyPokemonStats: Stat[],

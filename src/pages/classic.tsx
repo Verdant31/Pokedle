@@ -1,34 +1,37 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from 'axios';
+import CardTitle from '../components/CardTitle';
+import PokeHits from '../components/PokeHits';
 import { motion } from 'framer-motion'
 import { GetServerSideProps } from 'next';
 import { PaperPlaneRight } from 'phosphor-react';
-import { FormEvent, useState } from 'react';
-import { Pokemon } from '../@types';
+import { FormEvent, useCallback, useState } from 'react';
 import { prisma } from "../server/db/client";
 import { trpc } from '../utils/trpc';
-import PokeHits from '../components/PokeHits';
 import { pokeDto } from '../utils/pokeDto';
 import { api } from '../services/api';
-import CardTitle from '../components/CardTitle';
+import type { ComparedPokemon, Pokemon } from '../@types';
+import { comparePokemons } from '../utils/comparePokemons';
 interface ClassicProps {
   dailyPokemon: Pokemon
 }
 
 const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
-  const [ chosenPokemons, setChosenPokemons ] = useState<Pokemon[]>([]);
+  const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([])
   const [pokeName, setPokeName] = useState('')
+  
   const pokemons = trpc.pokemon.getAllPokemons.useQuery();
   const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
 
-  const handleSearchFirstPokemon = async (e: FormEvent) => {
+  const handleSearchFirstPokemon = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     if(pokeName.length > 0 ) {
       const { data } = await api.get("/pokemon/" + pokeName)
-      setChosenPokemons(oldState => [...oldState, data.chosenPokemon])
+      const compared : ComparedPokemon = comparePokemons(data.chosenPokemon, dailyPokemon);
+      setComparedPokemons(oldState => [...oldState, compared])
       setPokeName('')
     }
-  }
+  },[dailyPokemon, pokeName])
 
   return (
     <div>
@@ -74,8 +77,11 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
             <CardTitle>Speed</CardTitle>
           </div>
           <div className="flex flex-col items-center mt-8">
-            {chosenPokemons.length > 0 && chosenPokemons.slice(0).reverse().map((chosenPokemon) => (
-                <PokeHits key={chosenPokemon.name} chosenPokemon={chosenPokemon} dailyPokemon={dailyPokemon} />
+            {comparedPokemons.length > 0 && comparedPokemons.slice(0).reverse().map((compared) => (
+                <PokeHits 
+                  key={compared.chosenPokemon.id} 
+                  compared={compared}  
+                />
             ))}
           </div>
       </motion.div>

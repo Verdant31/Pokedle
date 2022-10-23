@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse } from "axios";
-import { AbilityResponse, MoveRsponse, Pokemon, Stat, StatRes, TypeResponse } from "../@types";
+import type { AbilityResponse, MoveRsponse, Pokemon, Stat, StatRes, TypeResponse } from "../@types";
 
 const isStats = (statsName: string) => {
     if(statsName === "hp") {

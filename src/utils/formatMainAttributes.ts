@@ -1,10 +1,5 @@
-import { Ability, Move, Type } from "../@types";
+import type { Ability, CommonMainAttributesCompare, Move, Type } from "../@types";
 
-export type CommonMainAttributesCompare = {
-    attributes: Ability[] | Move[] | Type[],
-    message: string
-    color: string
-}
 
 export const formatMainAttributes = (    
     dailyPokemonAttributes: Ability[] | Move[] | Type[],

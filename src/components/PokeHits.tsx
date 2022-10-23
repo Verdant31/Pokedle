@@ -1,89 +1,91 @@
 import Image from 'next/image';
 import { CaretDoubleLeft, CaretDoubleRight, Equals } from 'phosphor-react';
-import * as React from 'react';
-import { Pokemon } from '../@types';
-import { ComparedPokemons, comparePokemons } from '../utils/comparePokemons';
 import { motion } from 'framer-motion';
+import type { ComparedPokemon } from '../@types';
 interface IPokeHitsProps {
-    chosenPokemon: Pokemon;
-    dailyPokemon: Pokemon;
+    compared: ComparedPokemon;
 }
 
-const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, dailyPokemon}) => {
-    const compared : ComparedPokemons = comparePokemons(chosenPokemon, dailyPokemon);
-     
+const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
+    const animate = (transition: number) => ({
+        initial: {opacity: 0, scale: 0.5},
+        transition: { delay: transition },
+        animate: {opacity: 1, scale: 1}
+    })
+
     return (
-    <motion.div
-        initial={{y:-30, opacity: 1}}
+    <div
         className="flex justify-center relative gap-x-2"
     >
-        <div className="w-28 ">
+        <motion.div className="w-28" {...animate(0.3)}>
             <div className="h-24 w-full flex items-center justify-end">
-                <Image src={chosenPokemon.image} height={900} width={900} alt="Picture of chosen pokemon" />
+                <Image src={compared.chosenPokemon.image} height={900} width={900} alt="Picture of chosen pokemon" />
             </div>
-        </div>
-        <div className="w-24 ">
-            <div style={{backgroundColor: compared.abilities.color}} className={`h-20 w-full flex items-center justify-center `}>
-                {compared.abilities.message === "None" 
+        </motion.div>
+        
+        <motion.div  className="w-24"{...animate(0.5)} >
+            <div style={{backgroundColor: compared.comparison.abilities.color}} className={`h-20 w-full flex items-center justify-center `}>
+                {compared.comparison.abilities.message === "None" 
                     ? <p className="text-white text-sm font-semibold">None in common</p>
                     : (
                         <div className="flex flex-col">
-                            {compared.abilities.attributes.map((ability) => (
+                            {compared.comparison.abilities.attributes.map((ability) => (
                                 <p  key={ability.name} className="text-white text-sm font-semibold " >{ability.name}</p>
                             ))}
                         </div>
                     )
                 }
             </div>
-        </div>
-        <div className="w-24 ">
-            <div style={{backgroundColor: compared.moves.color}} className={`h-20  w-full flex items-center justify-center`}>
-                {compared.moves.message === "None" 
-                    ? <p className="text-white text-lg font-semibold">None in common</p>
+        </motion.div>
+
+        <motion.div {...animate(0.7)} className="w-24 ">
+            <div style={{backgroundColor: compared.comparison.moves.color}} className={`h-20  w-full flex items-center justify-center`}>
+                {compared.comparison.moves.message === "None" 
+                    ? <p className="text-white text-sm font-semibold">None in common</p>
                     : (
                         <div className="flex flex-col">
-                            <p className="text-white p-3 text-sm font-semibold " >{chosenPokemon.moves.length} moves ({compared.moves.attributes.length} in common)</p>
+                            <p className="text-white p-3 text-sm font-semibold " >{compared.chosenPokemon.moves.length} moves ({compared.comparison.moves.attributes.length} in common)</p>
                         </div>
                     )
                 }
             </div>
-        </div>
-        <div className="w-24 ">
-            <div style={{backgroundColor: compared.types.color}} className={`h-20 w-full flex items-center justify-center `}>
-                {compared.types.message === "None" 
+        </motion.div>
+        <motion.div {...animate(0.9)}className="w-24 ">
+            <div style={{backgroundColor: compared.comparison.types.color}} className={`h-20 w-full flex items-center justify-center `}>
+                {compared.comparison.types.message === "None" 
                     ? <p className="text-white text-sm font-semibold">None in common</p>
                     : (
                         <div className="flex flex-col ">
-                            {compared.types.attributes.map((type) => (
+                            {compared.comparison.types.attributes.map((type) => (
                                 <p  key={type.name} className=" text-white text-base font-semibold capitalize" >{type.name}</p>
                             ))}
                         </div>
                     )
                 }
             </div>
-        </div>
-        <div className="w-24 ">
-            <div style={{backgroundColor: compared.weight.color}} className={`h-20 w-full flex items-center justify-center `}>
+        </motion.div>
+        <motion.div {...animate(1.1)} className="w-24 ">
+            <div style={{backgroundColor: compared.comparison.weight.color}} className={`h-20 w-full flex items-center justify-center `}>
                 <div className="flex flex-col space-y-2 items-center">
-                    {compared.weight.message === "Less" && (<CaretDoubleLeft size={32} />)}
-                    {compared.weight.message === "Higher" && (<CaretDoubleRight size={32} />)}
-                    {compared.weight.message === "Equals" && (<Equals size={32} />)}
-                    <p className="text-white text-sm font-semibold " >{compared.weight.attributes}kg</p>
+                    {compared.comparison.weight.message === "Less" && (<CaretDoubleLeft size={32} />)}
+                    {compared.comparison.weight.message === "Higher" && (<CaretDoubleRight size={32} />)}
+                    {compared.comparison.weight.message === "Equals" && (<Equals size={32} />)}
+                    <p className="text-white text-sm font-semibold " >{compared.comparison.weight.attributes}kg</p>
                 </div>
             </div>
-        </div>
-        <div className="w-24 ">
-            <div  style={{backgroundColor: compared.height.color}} className={`h-20 w-full flex items-center justify-center `}>
+        </motion.div>
+        <motion.div {...animate(1.3)} className="w-24 ">
+            <div  style={{backgroundColor: compared.comparison.height.color}} className={`h-20 w-full flex items-center justify-center `}>
                 <div className="flex flex-col space-y-2">
-                    {compared.height.message === "Less" && (<CaretDoubleLeft size={32} />)}
-                    {compared.height.message === "Higher" && (<CaretDoubleRight size={32} />)}
-                    {compared.height.message === "Equals" && (<Equals size={32} />)}
-                    <p className="text-white text-sm font-semibold " >{compared.height.attributes}m</p>
+                    {compared.comparison.height.message === "Less" && (<CaretDoubleLeft size={32} />)}
+                    {compared.comparison.height.message === "Higher" && (<CaretDoubleRight size={32} />)}
+                    {compared.comparison.height.message === "Equals" && (<Equals size={32} />)}
+                    <p className="text-white text-sm font-semibold " >{compared.comparison.height.attributes}m</p>
                 </div>
             </div>
-        </div>
-        {compared.stats.map((stat) => (
-            <div className="w-24" key={stat.name}>
+        </motion.div>
+        {compared.comparison.stats.map((stat, index) => (
+            <motion.div {...animate(1.5 + index++/4)} className="w-24" key={stat.name}>
                 <div  style={{backgroundColor: stat.color}} className={`h-20 w-full flex items-center justify-center `}>
                     <div className="flex flex-col space-y-2">
                         {stat.message === "Less" && (<CaretDoubleLeft size={32} />)}
@@ -92,10 +94,10 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({chosenPokemon, daily
                         <p className="text-white text-sm font-semibold " >{stat.attributes}</p>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         ))}
         
-    </motion.div>
+    </div>
   )
 };
 

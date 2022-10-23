@@ -1,30 +1,11 @@
-import { Pokemon } from "../@types";
-import { CommonMainAttributesCompare, formatMainAttributes } from "./formatMainAttributes";
-import { CommonStatsCompare, formatStats } from "./formatStats";
-import { CommonSecondaryAttributesCompare, formatSecondaryAttributes } from "./formatSecondaryAttributes";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Comparison, Pokemon, CommonAttributesOfComparedPokemon, CommonStatsCompare, ComparedPokemons, CommonMainAttributesCompare, CommonSecondaryAttributesCompare } from "../@types";
+import {  formatMainAttributes } from "./formatMainAttributes";
+import {  formatStats } from "./formatStats";
+import { formatSecondaryAttributes } from "./formatSecondaryAttributes";
 import { getCommonAbilities } from "./getCommonAbilities";
 
-type CommonAttributesOfComparedPokemon = {
-    message: string,
-    color: string
-}
-
-export type ComparedPokemons =  {
-    [key: string]: CommonMainAttributesCompare | CommonSecondaryAttributesCompare | CommonStatsCompare[] | boolean | undefined; 
-    abilities: CommonMainAttributesCompare;
-    moves: CommonMainAttributesCompare;
-    types: CommonMainAttributesCompare;
-
-    stats: CommonStatsCompare[];
-
-    height: CommonSecondaryAttributesCompare;
-    weight: CommonSecondaryAttributesCompare;
-
-    win?: boolean;
-}
-
-
-const isSamePokemon = (comparedPokemon: ComparedPokemons) : boolean => {
+const isSamePokemon = (comparedPokemon: Comparison) : boolean => {
     let wins = 0;
     for (const key in comparedPokemon) {
         if(comparedPokemon[key] instanceof Array) {
@@ -49,16 +30,24 @@ export const comparePokemons = (pokemon: Pokemon, dailyPokemon: Pokemon) : Compa
     const weightCompare : CommonSecondaryAttributesCompare = formatSecondaryAttributes(dailyPokemon.weight, pokemon.weight) 
 
     const statsCompare : CommonStatsCompare[] = formatStats(dailyPokemon.stats, pokemon.stats);
-    
-    const compared : ComparedPokemons = {
+
+    const comparison : Comparison = {
         abilities: commonAbilitiesFormated,
         moves: commonMovesFormated,
         types: commonTypesFormated,
         height: heightCompare,
         weight: weightCompare,
-        stats: statsCompare
+        stats: statsCompare,
+        image: pokemon.image
     }
-    const win = isSamePokemon(compared);
+    const win = isSamePokemon(comparison);
     
-    return {...compared, win }
+    const compared : ComparedPokemons = {
+        chosenPokemon: pokemon,
+        comparison : {
+            ...comparison,
+            win
+        }
+    }
+    return compared;
 }

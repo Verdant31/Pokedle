@@ -1,4 +1,4 @@
-import { Ability, Move, Type } from "../@types";
+import type { Ability, Move, Type } from "../@types";
 
 export const getCommonAbilities = (
     firstPokemonAbilities: Ability[] | Move[] | Type[], 

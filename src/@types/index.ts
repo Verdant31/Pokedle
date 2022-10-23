@@ -1,3 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type CommonAttributesOfComparedPokemon = {
+    message: string,
+    color: string
+}
+
+export type CommonMainAttributesCompare = {
+    attributes: Ability[] | Move[] | Type[],
+    message: string
+    color: string
+}
+export type CommonSecondaryAttributesCompare = {
+    attributes: number,
+    message: string,
+    color: string
+}
+export type CommonStatsCompare  = {
+    name: string;
+    attributes: number,
+    message: string
+    color: string
+}
+export type Comparison = {
+    [key: string]: any; 
+    abilities: CommonMainAttributesCompare;
+    moves: CommonMainAttributesCompare;
+    types: CommonMainAttributesCompare;
+    stats: CommonStatsCompare[];
+    height: CommonSecondaryAttributesCompare;
+    weight: CommonSecondaryAttributesCompare;
+
+    image: string;
+    win?: boolean;
+}   
+
+export type ComparedPokemon =  {
+    [key: string]: any; 
+    chosenPokemon: Pokemon;
+    comparison: Comparison;
+}
+
 export type Pokemon = {
     name: string;
     abilities: Ability[];

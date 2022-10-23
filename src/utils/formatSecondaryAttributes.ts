@@ -1,8 +1,4 @@
-export type CommonSecondaryAttributesCompare = {
-    attributes: number,
-    message: string,
-    color: string
-}
+import type  { CommonSecondaryAttributesCompare } from "../@types"
 
 
 export const formatSecondaryAttributes = (    
