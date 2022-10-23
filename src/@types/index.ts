@@ -16,7 +16,7 @@ export type Type = {
     url: string
 }
 
-export type Stat = {
+export type StatRes = {
     base_stat: number;
     effort: number;
     stat: {
@@ -24,7 +24,11 @@ export type Stat = {
         url: string;
     }
 }
-
+export type Stat = {
+    baseStat: number;
+    effort: number;
+    name: string;
+}
 export type Move = {
     name: string;
     url: string;

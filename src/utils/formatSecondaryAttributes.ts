@@ -30,18 +30,3 @@ export const formatSecondaryAttributes = (
         }
     }
 }
-
-// const heightCompare : CommonHeightCompare = pokemon.height > dailyPokemon.height ? {
-//     height: pokemon.height,
-//     comparison: "Less",
-//     color: "#d97706"
-// } : pokemon.height < dailyPokemon.height ? {
-//     height: pokemon.height,
-//     comparison: "Higher",
-//     color: "#d97706"
-// } : {
-//     height: pokemon.height,
-//     comparison: "Equal",
-//     color: "#16a34a"
-// }
-

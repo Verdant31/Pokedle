@@ -1,16 +1,36 @@
-import { Ability, Move, Stat, Type } from "../@types";
+import { Stat } from "../@types";
 
-export type CommonMainAttributesCompare = {
-    attributes: Ability[] | Move[] | Type[],
+export type CommonStatsCompare  = {
+    name: string;
+    attributes: number,
     message: string
     color: string
 }
 
 export const formatStats = ( 
-    dailyPokemon: Stat[],
-    chosenPokemon: Stat[]   
-) => {
-    console.log(dailyPokemon);
-    console.log(chosenPokemon);
+    dailyPokemonStats: Stat[],
+    chosenPokemonStats: Stat[]   
+) : CommonStatsCompare[] => {
+    return chosenPokemonStats.map((chosenPokemonStat) => {
+        const dailyPokemonStat = dailyPokemonStats.find((dailyPokemonStat) => dailyPokemonStat.name === chosenPokemonStat.name);
+        if(dailyPokemonStat) {
+            const attributes = chosenPokemonStat.baseStat;
+            const message = dailyPokemonStat.baseStat - chosenPokemonStat.baseStat === 0 ? 'Equals' : dailyPokemonStat.baseStat - chosenPokemonStat.baseStat > 0 ? 'Higher' : 'Less';
+            const color = dailyPokemonStat.baseStat - chosenPokemonStat.baseStat === 0 ? '#16a34a' : dailyPokemonStat.baseStat - chosenPokemonStat.baseStat > 0 ? '#d97706' : '#d97706';
+            return {
+                name: chosenPokemonStat.name,
+                attributes,
+                message,
+                color
+            }
+        }else {
+            return {
+                name: "",
+                attributes: 0,
+                message: "",
+                color: ""
+            }
+        }
+    });
 }
 

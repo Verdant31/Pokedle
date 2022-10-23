@@ -31,7 +31,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
 
   return (
     <div>
-      <motion.div className="mt-8 text-center h-[100vh]">
+      <motion.div className="mt-8 text-center h-full mb-24">
         <h1 className="text-xl">Guess todays Pokemon!!</h1>
         <h1>Type any Pokemon to begin.</h1>
         <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[300px] mx-auto justify-center mt-8 items-center ">
@@ -61,8 +61,8 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
             <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
           </button>
         </form>
-        <div className="flex flex-col items-center space-y-6 mt-8 ">
-          {chosenPokemons.length > 0 && chosenPokemons.map((chosenPokemon) => (
+        <div className="flex flex-col items-center space-y-6 mt-8">
+          {chosenPokemons.length > 0 && chosenPokemons.slice(0).reverse().map((chosenPokemon) => (
               <PokeHits key={chosenPokemon.name} chosenPokemon={chosenPokemon} dailyPokemon={dailyPokemon} />
           ))}
         </div>
@@ -73,7 +73,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
 
 export default Classic;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const dbPokemon = await prisma.dailyPokemon.findFirst();
   const dailyPokemon : Pokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${dbPokemon?.pokemonId}`).then((res) => {
     return pokeDto(res);
