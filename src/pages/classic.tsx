@@ -21,14 +21,15 @@ interface ClassicProps {
 
 const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
   const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([]);
-  if(comparedPokemons.length === 0 && userCookies && userCookies?.classicPokemons.length > 0) {
-    setComparedPokemons(userCookies.classicPokemons);
-  }
   const [ animationFinished, setAnimationFinished ] = useState<boolean>(false);
   const [ pokeName, setPokeName ] = useState('')
   
   const pokemons = trpc.pokemon.getAllPokemons.useQuery();
   const { addComparedPokemon } = useUser();
+
+  if(comparedPokemons.length === 0 && userCookies && userCookies?.classicPokemons.length > 0) {
+    setComparedPokemons(userCookies.classicPokemons);
+  }
 
   const updateAnimationFinished = () => setAnimationFinished(true);
 
@@ -49,36 +50,45 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
       <Header />
       <div>
         <motion.div className="mt-8 text-center h-full mb-24 ">
-          <h1 className="text-xl">Guess todays Pokemon!!</h1>
-          <h1>Type any Pokemon to begin.</h1>
-          <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[300px] mx-auto justify-center mt-8 items-center ">
-            <div>
-              <input value={pokeName} autoComplete='false' onChange={(e) => setPokeName(e.target.value)} list="pokemons" className="h-10 w-full p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none " />
-              <datalist  id="pokemons" className="h-20">
-                {filteredPokemons && filteredPokemons.length > 0 
-                  ? (
-                    filteredPokemons.map(pokemon => (
-                      <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
-                    ))
-                  )
-                  : (
-                    pokemons.data?.map(pokemon => (
-                      <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
-                    ))
-                  )
-                }
-              </datalist>
-            </div>
-            <img 
-              src="/pokeball.png" 
-              alt="pokeball" 
-              className="w-8 h-8 absolute left-[16px] top-2" 
-            />
-            <button type="submit" className="absolute  -right-12" >
-              <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
-            </button>
-          </form>
-          <ComparisonBody onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
+          {userCookies?.alreadyWon 
+            ? (
+              <a href="#winnercard" className="text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
+            )
+            : (
+              <>
+                <h1 className="text-xl">Guess todays Pokemon!!</h1>
+                <h1>Type any Pokemon to begin.</h1>
+                <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[300px] mx-auto justify-center mt-8 items-center ">
+                  <div>
+                    <input value={pokeName} autoComplete='false' onChange={(e) => setPokeName(e.target.value)} list="pokemons" className="h-10 w-full p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none " />
+                    <datalist  id="pokemons" className="h-20">
+                      {filteredPokemons && filteredPokemons.length > 0 
+                        ? (
+                          filteredPokemons.map(pokemon => (
+                            <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
+                          ))
+                        )
+                        : (
+                          pokemons.data?.map(pokemon => (
+                            <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
+                          ))
+                        )
+                      }
+                    </datalist>
+                  </div>
+                  <img 
+                    src="/pokeball.png" 
+                    alt="pokeball" 
+                    className="w-8 h-8 absolute left-[16px] top-2" 
+                  />
+                  <button type="submit" className="absolute  -right-12" >
+                    <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
+                  </button>
+                </form>
+              </>
+            )
+          }
+          <ComparisonBody userAlreadyWon={userCookies?.alreadyWon ? true : false} onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
         </motion.div>
       </div>
       {comparedPokemons.find((compared) => compared.comparison.win) && animationFinished && (

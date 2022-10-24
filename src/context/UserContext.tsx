@@ -1,6 +1,6 @@
-import { createContext, ReactNode, useContext, useState }  from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState }  from 'react';
 import { ComparedPokemon } from '../@types';
-import {  setCookie } from 'nookies';
+import {  parseCookies, setCookie } from 'nookies';
 import { api } from '../services/api';
 
 export type User = {
@@ -11,7 +11,6 @@ interface UserContextProps {
     user: User | undefined;
     handleUserWin: () => void;
     addComparedPokemon: (pokemon: ComparedPokemon) => Promise<void>;
-    alreadyWon: boolean;
 }
 interface UserContextProvider {
     children: ReactNode
@@ -21,7 +20,6 @@ const UserContext = createContext({} as UserContextProps);
 
 export default function UserContextProvider({children} : UserContextProvider) {
     const [ user, setUser ] = useState<User>({alreadyWon: false, classicPokemons: []});
-    const alreadyWon = user.alreadyWon;
     
     const handleUserWin = () => {
         setUser(oldState => ({...oldState, alreadyWon: true}))
@@ -37,9 +35,9 @@ export default function UserContextProvider({children} : UserContextProvider) {
                 ]   
             }));
         setUser(oldState => ({...oldState, classicPokemons: [...oldState.classicPokemons, compared]}));
-        // if(won) {
-        //     await api.get('/pokemon/incrementhits')            
-        // }
+        if(won) {
+            // await api.get('/pokemon/incrementhits')            
+        }
     }
    
 
@@ -48,7 +46,6 @@ export default function UserContextProvider({children} : UserContextProvider) {
             user,
             handleUserWin,
             addComparedPokemon,
-            alreadyWon
         }}>
             {children}
         </UserContext.Provider>

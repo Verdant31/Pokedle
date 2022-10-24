@@ -15,8 +15,6 @@ const Home: React.FunctionComponent = () => {
           {/* <CardSelection onClick={onClick} title="Splash" subtitle="Uma parte da foto de um pokemon" /> */}
         </div>
       </div>
-
-
     </div>
   );
 };

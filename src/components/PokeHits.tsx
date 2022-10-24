@@ -2,23 +2,32 @@ import Image from 'next/image';
 import { CaretDoubleLeft, CaretDoubleRight, Equals } from 'phosphor-react';
 import { motion } from 'framer-motion';
 import type { ComparedPokemon } from '../@types';
-import { useUser } from '../context/UserContext';
 interface IPokeHitsProps {
     compared: ComparedPokemon;
     onAnimationComplete: () => void;
+    userAlreadyWon: boolean;
 }
 
-const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimationComplete}) => {
+const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimationComplete, userAlreadyWon}) => {
     const animate = (transition: number) => {
-        return {
-            initial: {opacity: 0, scale: 0.5},
-            transition: { delay: transition },
-            animate: {opacity: 1, scale: 1}
+        if(userAlreadyWon) {
+            onAnimationComplete()
+            return;
         }
+        else {
+            return {
+                initial: {opacity: 0, scale: 0.5},
+                transition: { delay: transition },
+                animate: {opacity: 1, scale: 1}
+            }
+        }
+        
     }
     const animationCompleted = (index: number) => {
         if(compared.comparison.win) {
-            if(index == 2) onAnimationComplete(); 
+            if(index == 2) {
+                onAnimationComplete()
+            }  
             if(index == 3) {
                 document.getElementById('winnercard')?.scrollIntoView({ behavior: 'smooth'})
             }   

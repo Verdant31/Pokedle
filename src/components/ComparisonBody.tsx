@@ -6,11 +6,13 @@ import PokeHits from './PokeHits';
 interface IComparisonBodyProps {
   comparedPokemons: ComparedPokemon[]
   onAnimationComplete: () => void;
+  userAlreadyWon: boolean;
 }
 
 const ComparisonBody: React.FunctionComponent<IComparisonBodyProps> = ({
     comparedPokemons,
-    onAnimationComplete
+    onAnimationComplete,
+    userAlreadyWon,
 }) => {
   return (
     <>
@@ -20,6 +22,7 @@ const ComparisonBody: React.FunctionComponent<IComparisonBodyProps> = ({
               <div className="flex flex-col items-center mt-8">
                 {comparedPokemons.slice(0).reverse().map((compared) => (
                   <PokeHits
+                  userAlreadyWon={userAlreadyWon}
                     onAnimationComplete={onAnimationComplete}
                     key={compared.chosenPokemon.id} 
                     compared={compared}  
