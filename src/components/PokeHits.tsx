@@ -5,18 +5,20 @@ import type { ComparedPokemon } from '../@types';
 import { useUser } from '../context/UserContext';
 interface IPokeHitsProps {
     compared: ComparedPokemon;
+    onAnimationComplete: () => void;
 }
 
-const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
-    const { handleUserWin } = useUser();
-    const animate = (transition: number) => ({
-        initial: {opacity: 0, scale: 0.5},
-        transition: { delay: transition },
-        animate: {opacity: 1, scale: 1}
-    })
+const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimationComplete}) => {
+    const animate = (transition: number) => {
+        return {
+            initial: {opacity: 0, scale: 0.5},
+            transition: { delay: transition },
+            animate: {opacity: 1, scale: 1}
+        }
+    }
     const animationCompleted = (index: number) => {
         if(compared.comparison.win) {
-            if(index == 2) handleUserWin(); 
+            if(index == 2) onAnimationComplete(); 
             if(index == 3) {
                 document.getElementById('winnercard')?.scrollIntoView({ behavior: 'smooth'})
             }   

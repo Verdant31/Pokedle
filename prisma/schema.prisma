@@ -15,3 +15,8 @@ model DailyPokemon {
   pokemonId Int
   name      String
 }
+
+model DailyHits {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  hits Int
+}

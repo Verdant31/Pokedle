@@ -3,38 +3,46 @@ import { motion } from 'framer-motion'
 import { GetServerSideProps } from 'next';
 import { PaperPlaneRight } from 'phosphor-react';
 import { FormEvent, useCallback, useState } from 'react';
-import { prisma } from "../server/db/client";
 import { trpc } from '../utils/trpc';
 import { pokeDto } from '../utils/pokeDto';
 import { api } from '../services/api';
 import type { ComparedPokemon, Pokemon } from '../@types';
 import ComparisonBody from '../components/ComparisonBody';
 import WinnerCard from '../components/WinnerCard';
-import { useUser } from '../context/UserContext';
+import { User, useUser } from '../context/UserContext';
 import Header from '../components/Header';
 import { pokemonApi } from "../services/pokemonClient";
+import { parseCookies } from 'nookies';
 
 interface ClassicProps {
-  dailyPokemon: Pokemon
+  dailyPokemon: Pokemon;
+  userCookies?: User
 }
 
-const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
-  const { user, handleUserComparedPokemon } = useUser();
-  const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([])
-  const [pokeName, setPokeName] = useState('')
+const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
+  const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([]);
+  if(comparedPokemons.length === 0 && userCookies && userCookies?.classicPokemons.length > 0) {
+    setComparedPokemons(userCookies.classicPokemons);
+  }
+  const [ animationFinished, setAnimationFinished ] = useState<boolean>(false);
+  const [ pokeName, setPokeName ] = useState('')
   
   const pokemons = trpc.pokemon.getAllPokemons.useQuery();
-  const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
+  const { addComparedPokemon } = useUser();
+
+  const updateAnimationFinished = () => setAnimationFinished(true);
 
   const handleSearchFirstPokemon = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     if(pokeName.length > 0 ) {
       const { data } = await api.post("/pokemon/" + pokeName, {dailyPokemon})
       setComparedPokemons(oldState => [...oldState, data.compared])
-      handleUserComparedPokemon(data.compared)
+      await addComparedPokemon(data.compared)
       setPokeName('')
     }
-  },[dailyPokemon, handleUserComparedPokemon, pokeName])
+  },[dailyPokemon, addComparedPokemon, pokeName])
+
+  const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
 
   return (
     <div className="flex flex-col items-center h-screen overflow-y-scroll scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
@@ -70,27 +78,44 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
               <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
             </button>
           </form>
-          <ComparisonBody comparedPokemons={comparedPokemons}/>
+          <ComparisonBody onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
         </motion.div>
       </div>
-      {user?.alreadyWon && (
+      {comparedPokemons.find((compared) => compared.comparison.win) && animationFinished && (
           <WinnerCard dailyPokemon={dailyPokemon} />
-        )}
+      )}
     </div>
   )
 };
 
 export default Classic;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  // const dbPokemon = await prisma.dailyPokemon.findFirst();
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // const dbPokemon = await prisma?.dailyPokemon.findFirst();
   const dbPokemon = {
     name: "charmander",
     id: "4"
   }
+  const userCookies : User = {alreadyWon: false, classicPokemons: []};
+  const { "pokedle.user": cookiesUser } = parseCookies(ctx);
+
   if(!dbPokemon) return {props: {}};
-  const dailyPokemon = await pokemonApi.getPokemonByName(dbPokemon?.name).then(res => pokeDto(res))
+  const dailyPokemon = await pokemonApi.getPokemonByName(dbPokemon?.name).then(res => pokeDto(res));
+  
+  if(cookiesUser) {
+    userCookies.alreadyWon = JSON.parse(cookiesUser).alreadyWon;
+    await Promise.all(
+      (JSON.parse(cookiesUser)["classicPokemons"] as string[]).map(async (pokemon) => {
+        const { data } = await api.post("/pokemon/" + pokemon, {dailyPokemon})
+        userCookies.classicPokemons.push(data.compared);
+      })
+    )
+  }
+
   return {
-    props: { dailyPokemon },
+    props: { 
+      dailyPokemon,
+      userCookies,
+    },
   }
 }
