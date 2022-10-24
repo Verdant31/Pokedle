@@ -27,6 +27,14 @@ export const pokemon = router({
         return pokeDto(res);
       });
       return pokemon;
+    }),
+  getDreamWorldImage: publicProcedure
+    .input(z.object({ name: z.string()}))
+    .query(async ({input}) => {
+      const image : string = await axios.get(`https://pokeapi.co/api/v2/pokemon/${input.name}`).then((res) => {
+        return res.data.sprites.other.dream_world.front_default;
+      });
+      return image;
     })
 });
 

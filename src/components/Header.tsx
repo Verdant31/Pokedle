@@ -6,7 +6,7 @@ import * as React from 'react';
 const Header: React.FC = () => {
     const router = useRouter();
     return (
-        <div className="flex mt-12 w-full gap-x-12 justify-center items-center self-center ">
+        <div className="inset  pt-12 flex w-full gap-x-12 justify-center items-center self-center ">
             <Image src="/bg-1.png" height={120} width={160} alt="Pictures of bulbassaur, squirtle, charmandar and pikachu"/>
             <Image 
                 onClick={() => router.push('/')}

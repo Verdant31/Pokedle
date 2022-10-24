@@ -1,8 +1,11 @@
 import { createContext, ReactNode, useCallback, useContext, useState }  from 'react';
-import { ComparedPokemons } from '../utils/comparePokemons';
 
+type User = {
+    alreadyWon: boolean;
+}
 interface UserContextProps {
-    updateClassicAnswers: (newAnswer: ComparedPokemons) => void;
+    user: User | undefined;
+    updateUser: () => void;
 }
 interface UserContextProvider {
     children: ReactNode
@@ -11,15 +14,16 @@ interface UserContextProvider {
 const UserContext = createContext({} as UserContextProps);
 
 export default function UserContextProvider({children} : UserContextProvider) {
-    const [ classicAnswers, setClassicAnswers ] = useState<ComparedPokemons[]>([])
+    const [ user, setUser ] = useState<User>({alreadyWon: false});
 
-    const updateClassicAnswers = useCallback((newAnswer: ComparedPokemons) => {
-        setClassicAnswers((oldAnswers) => [...oldAnswers, newAnswer])
-    }, [])
+    const updateUser = () => {
+        setUser(oldUser => ({...oldUser, alreadyWon: true}));
+    }
 
     return (
         <UserContext.Provider value={{
-            updateClassicAnswers
+            user,
+            updateUser
         }}>
             {children}
         </UserContext.Provider>

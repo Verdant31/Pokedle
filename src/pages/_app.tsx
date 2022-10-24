@@ -1,20 +1,18 @@
 import "../styles/globals.css";
-import type { AppType } from "next/app";
+import type { AppProps, AppType } from "next/app";
 import { trpc } from "../utils/trpc";
 import Header from "../components/Header";
 import DailyPokemonProvider from "../context/DailyPokemon";
-import UserContextProvider from "../context/UserContext";
+import UserContextProvider, { useUser } from "../context/UserContext";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+const MyApp: AppType = ({ Component, pageProps } : AppProps) => {
+  const { user } = useUser();
   return (
-    <UserContextProvider>
-      <DailyPokemonProvider>
-        <div className="flex flex-col items-center max-w-6xl mx-auto">
-          <Header />
-          <Component {...pageProps} />
-        </div>
-      </DailyPokemonProvider>
-    </UserContextProvider>
+      <UserContextProvider>
+        <DailyPokemonProvider>
+            <Component {...pageProps} />
+        </DailyPokemonProvider>
+      </UserContextProvider>
   );
 };
 
