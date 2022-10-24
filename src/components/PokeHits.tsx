@@ -8,7 +8,7 @@ interface IPokeHitsProps {
 }
 
 const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
-    const { updateUser } = useUser();
+    const { handleUserWin } = useUser();
     const animate = (transition: number) => ({
         initial: {opacity: 0, scale: 0.5},
         transition: { delay: transition },
@@ -16,8 +16,8 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
     })
     const animationCompleted = (index: number) => {
         if(compared.comparison.win) {
-            updateUser()
-            if(index == 2) {
+            if(index == 2) handleUserWin(); 
+            if(index == 3) {
                 document.getElementById('winnercard')?.scrollIntoView({ behavior: 'smooth'})
             }   
         }
@@ -25,12 +25,12 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
 
     return (
     <div className="flex justify-center relative gap-x-2">
-        <motion.div className="w-28" {...animate(0.3)}>
+        <motion.div className="w-28" {...animate(0.2)}>
             <div className="h-24 w-full flex items-center justify-end">
                 <Image src={compared.chosenPokemon.image} height={900} width={900} alt="Picture of chosen pokemon" />
             </div>
         </motion.div>
-        <motion.div  className="w-24"{...animate(0.5)} >
+        <motion.div  className="w-24"{...animate(1)} >
             <div style={{backgroundColor: compared.comparison.abilities.color}} className={`h-20 w-full flex items-center justify-center `}>
                 {compared.comparison.abilities.message === "None" 
                     ? <p className="text-white text-sm font-semibold">None in common</p>
@@ -45,7 +45,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
             </div>
         </motion.div>
 
-        <motion.div {...animate(0.7)} className="w-24 ">
+        <motion.div {...animate(1.5)} className="w-24 ">
             <div style={{backgroundColor: compared.comparison.moves.color}} className={`h-20  w-full flex items-center justify-center`}>
                 {compared.comparison.moves.message === "None" 
                     ? <p className="text-white text-sm font-semibold">None in common</p>
@@ -57,7 +57,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
                 }
             </div>
         </motion.div>
-        <motion.div {...animate(0.9)}className="w-24 ">
+        <motion.div {...animate(2.0)}className="w-24 ">
             <div style={{backgroundColor: compared.comparison.types.color}} className={`h-20 w-full flex items-center justify-center `}>
                 {compared.comparison.types.message === "None" 
                     ? <p className="text-white text-sm font-semibold">None in common</p>
@@ -71,7 +71,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
                 }
             </div>
         </motion.div>
-        <motion.div {...animate(1.1)} className="w-24 ">
+        <motion.div {...animate(2.5)} className="w-24 ">
             <div style={{backgroundColor: compared.comparison.weight.color}} className={`h-20 w-full flex items-center justify-center `}>
                 <div className="flex flex-col space-y-2 items-center">
                     {compared.comparison.weight.message === "Less" && (<CaretDoubleLeft size={32} />)}
@@ -81,7 +81,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
                 </div>
             </div>
         </motion.div>
-        <motion.div {...animate(1.3)} className="w-24 ">
+        <motion.div {...animate(3)} className="w-24 ">
             <div  style={{backgroundColor: compared.comparison.height.color}} className={`h-20 w-full flex items-center justify-center `}>
                 <div className="flex flex-col space-y-2">
                     {compared.comparison.height.message === "Less" && (<CaretDoubleLeft size={32} />)}
@@ -92,7 +92,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared}) => {
             </div>
         </motion.div>
         {compared.comparison.stats.map((stat, index) => (
-            <motion.div onAnimationComplete={() => animationCompleted(index)} {...animate(1.5 + index++/4)} className="w-24" key={stat.name}>
+            <motion.div onAnimationComplete={() => animationCompleted(index)} {...animate(3.5 + index++/1.7)} className="w-24" key={stat.name}>
                 <div  style={{backgroundColor: stat.color}} className={`h-20 w-full flex items-center justify-center `}>
                     <div className="flex flex-col space-y-2">
                         {stat.message === "Less" && (<CaretDoubleLeft size={32} />)}

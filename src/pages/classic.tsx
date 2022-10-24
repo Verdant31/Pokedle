@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import axios from 'axios';
 import { motion } from 'framer-motion'
 import { GetServerSideProps } from 'next';
 import { PaperPlaneRight } from 'phosphor-react';
@@ -13,25 +12,29 @@ import ComparisonBody from '../components/ComparisonBody';
 import WinnerCard from '../components/WinnerCard';
 import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
+import { pokemonApi } from "../services/pokemonClient";
+
 interface ClassicProps {
   dailyPokemon: Pokemon
 }
 
 const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
-  const { user } = useUser();
+  const { user, handleUserComparedPokemon } = useUser();
   const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([])
   const [pokeName, setPokeName] = useState('')
   
   const pokemons = trpc.pokemon.getAllPokemons.useQuery();
   const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
+
   const handleSearchFirstPokemon = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     if(pokeName.length > 0 ) {
       const { data } = await api.post("/pokemon/" + pokeName, {dailyPokemon})
       setComparedPokemons(oldState => [...oldState, data.compared])
+      handleUserComparedPokemon(data.compared)
       setPokeName('')
     }
-  },[dailyPokemon, pokeName])
+  },[dailyPokemon, handleUserComparedPokemon, pokeName])
 
   return (
     <div className="flex flex-col items-center h-screen overflow-y-scroll scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
@@ -80,10 +83,13 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon}) => {
 export default Classic;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const dbPokemon = await prisma.dailyPokemon.findFirst();
-  const dailyPokemon : Pokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${dbPokemon?.pokemonId}`).then((res) => {
-    return pokeDto(res);
-  });
+  // const dbPokemon = await prisma.dailyPokemon.findFirst();
+  const dbPokemon = {
+    name: "charmander",
+    id: "4"
+  }
+  if(!dbPokemon) return {props: {}};
+  const dailyPokemon = await pokemonApi.getPokemonByName(dbPokemon?.name).then(res => pokeDto(res))
   return {
     props: { dailyPokemon },
   }

@@ -1,11 +1,14 @@
-import { createContext, ReactNode, useCallback, useContext, useState }  from 'react';
+import { createContext, ReactNode, useContext, useState }  from 'react';
+import { ComparedPokemon } from '../@types';
 
 type User = {
     alreadyWon: boolean;
+    classicPokemons: ComparedPokemon[];
 }
 interface UserContextProps {
     user: User | undefined;
-    updateUser: () => void;
+    handleUserWin: () => void;
+    handleUserComparedPokemon: (pokemon: ComparedPokemon) => void;
 }
 interface UserContextProvider {
     children: ReactNode
@@ -14,16 +17,20 @@ interface UserContextProvider {
 const UserContext = createContext({} as UserContextProps);
 
 export default function UserContextProvider({children} : UserContextProvider) {
-    const [ user, setUser ] = useState<User>({alreadyWon: false});
+    const [ user, setUser ] = useState<User>({alreadyWon: false, classicPokemons: []});
+    const handleUserWin = () => {
+        setUser(oldState => ({...oldState, alreadyWon: true}))
+    }
 
-    const updateUser = () => {
-        setUser(oldUser => ({...oldUser, alreadyWon: true}));
+    const handleUserComparedPokemon = (compared: ComparedPokemon) => {
+        setUser(oldState => ({...oldState, classicPokemons: [...oldState.classicPokemons, compared]}));
     }
 
     return (
         <UserContext.Provider value={{
             user,
-            updateUser
+            handleUserWin,
+            handleUserComparedPokemon
         }}>
             {children}
         </UserContext.Provider>
