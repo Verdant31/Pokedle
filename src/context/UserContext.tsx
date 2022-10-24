@@ -1,11 +1,16 @@
-import { createContext, ReactNode, useCallback, useContext, useState }  from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState }  from 'react';
+import { ComparedPokemon } from '../@types';
+import {  parseCookies, setCookie } from 'nookies';
+import { api } from '../services/api';
 
-type User = {
+export type User = {
     alreadyWon: boolean;
+    classicPokemons: ComparedPokemon[];
 }
 interface UserContextProps {
     user: User | undefined;
-    updateUser: () => void;
+    handleUserWin: () => void;
+    addComparedPokemon: (pokemon: ComparedPokemon) => Promise<void>;
 }
 interface UserContextProvider {
     children: ReactNode
@@ -14,16 +19,33 @@ interface UserContextProvider {
 const UserContext = createContext({} as UserContextProps);
 
 export default function UserContextProvider({children} : UserContextProvider) {
-    const [ user, setUser ] = useState<User>({alreadyWon: false});
-
-    const updateUser = () => {
-        setUser(oldUser => ({...oldUser, alreadyWon: true}));
+    const [ user, setUser ] = useState<User>({alreadyWon: false, classicPokemons: []});
+    
+    const handleUserWin = () => {
+        setUser(oldState => ({...oldState, alreadyWon: true}))
     }
+
+    const addComparedPokemon = async (compared: ComparedPokemon) => {
+        const won = compared.comparison.win;
+        setCookie(undefined, 'pokedle.user', JSON.stringify(
+            {   alreadyWon: won, 
+                classicPokemons: [
+                    ...user.classicPokemons.map((pokemon) => (pokemon.chosenPokemon.name)), 
+                    compared.chosenPokemon.name
+                ]   
+            }));
+        setUser(oldState => ({...oldState, classicPokemons: [...oldState.classicPokemons, compared]}));
+        if(won) {
+            // await api.get('/pokemon/incrementhits')            
+        }
+    }
+   
 
     return (
         <UserContext.Provider value={{
             user,
-            updateUser
+            handleUserWin,
+            addComparedPokemon,
         }}>
             {children}
         </UserContext.Provider>

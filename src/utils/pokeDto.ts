@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { AxiosResponse } from "axios";
 import type { AbilityResponse, MoveRsponse, Pokemon, Stat, StatRes, TypeResponse } from "../@types";
 
 const isStats = (statsName: string) => {
@@ -21,16 +19,16 @@ const returnStats = (stat: StatRes) : Stat | false => {
         return false
     }
 }
+import { Pokemon as TSPokemon } from 'pokenode-ts/dist/index';
 
-export const pokeDto = (res: AxiosResponse<any, any>) : Pokemon => {
-    const data = res.data;
+export const pokeDto = (data: TSPokemon) : Pokemon => {
     return {
         abilities: data.abilities.map((ability: AbilityResponse) => ({name: ability.ability.name, url: ability.ability.url})),
         height: data.height,
         weight: data.weight,
         name: data.name,
         id: data.id,
-        image: data.sprites.front_default,
+        image: data.sprites.front_default ? data.sprites.front_default : "",
         types: data.types.map((type: TypeResponse) => ({name: type.type.name, url: type.type.url})),
         stats: data.stats.map((stats : StatRes) => isStats(stats.stat.name) ? returnStats(stats) : false).filter((stat: Stat | false) => stat !== false),
         locationAreaEncounters: data.location_area_encounters,

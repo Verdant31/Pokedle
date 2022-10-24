@@ -48,7 +48,7 @@ export type Pokemon = {
     locationAreaEncounters: string;
     moves: Move[];
     image: string;
-    stats: Stat[];
+    stats: Stat[] | any;
     types: Type[];
 }
 
