@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!pid) return;
   try {
     const  { name, id } = await pokemonApi.getPokemonById(Number(pid));
-    await prisma.dailyPokemon.create({data:{name, pokemonId: id}})
+    await prisma.dailyPokemon.create({data:{name, pokemonId: id, lastUpdate: new Date()}});
     res.status(200).json({message: 'Novo pokemon do dia adicionado com sucesso.'})
   }catch(err) {
     console.log(err);
