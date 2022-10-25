@@ -36,7 +36,7 @@ export default function UserContextProvider({children} : UserContextProvider) {
             }));
         setUser(oldState => ({...oldState, classicPokemons: [...oldState.classicPokemons, compared]}));
         if(won) {
-            // await api.get('/pokemon/incrementhits')            
+            await api.get('/pokemon/incrementhits')            
         }
     }
    

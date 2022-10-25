@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Comparison, Pokemon, CommonAttributesOfComparedPokemon, CommonStatsCompare, ComparedPokemons, CommonMainAttributesCompare, CommonSecondaryAttributesCompare } from "../@types";
+import type { Comparison, Pokemon, CommonAttributesOfComparedPokemon, CommonStatsCompare, ComparedPokemon, CommonMainAttributesCompare, CommonSecondaryAttributesCompare } from "../@types";
 import {  formatMainAttributes } from "./formatMainAttributes";
 import {  formatStats } from "./formatStats";
 import { formatSecondaryAttributes } from "./formatSecondaryAttributes";
@@ -18,7 +18,7 @@ const isSamePokemon = (comparedPokemon: Comparison) : boolean => {
 }
 
 
-export const comparePokemons = (pokemon: Pokemon, dailyPokemon: Pokemon) : ComparedPokemons  => {
+export const comparePokemons = (pokemon: Pokemon, dailyPokemon: Pokemon) : ComparedPokemon  => {
     const commonAbilities = getCommonAbilities(pokemon.abilities, dailyPokemon.abilities);
     const commonMoves = getCommonAbilities(pokemon.moves, dailyPokemon.moves);
     const commonTypes = getCommonAbilities(pokemon.types, dailyPokemon.types); 
@@ -42,7 +42,7 @@ export const comparePokemons = (pokemon: Pokemon, dailyPokemon: Pokemon) : Compa
     }
     const win = isSamePokemon(comparison);
     
-    const compared : ComparedPokemons = {
+    const compared : ComparedPokemon = {
         chosenPokemon: pokemon,
         comparison : {
             ...comparison,

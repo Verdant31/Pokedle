@@ -101,11 +101,8 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
 export default Classic;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const dbPokemon = await prisma?.dailyPokemon.findFirst();
-  const dbPokemon = {
-    name: "charmander",
-    id: "4"
-  }
+  const dbPokemon = await prisma?.dailyPokemon.findFirst();
+
   const userCookies : User = {alreadyWon: false, classicPokemons: []};
   const { "pokedle.user": cookiesUser } = parseCookies(ctx);
 
