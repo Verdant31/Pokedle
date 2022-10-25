@@ -11,7 +11,6 @@ interface IPokeHitsProps {
 const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimationComplete, userAlreadyWon}) => {
     const animate = (transition: number) => {
         if(userAlreadyWon) {
-            onAnimationComplete()
             return;
         }
         else {

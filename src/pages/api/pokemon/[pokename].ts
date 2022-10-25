@@ -4,6 +4,7 @@ import { pokeDto } from "../../../utils/pokeDto";
 import { comparePokemons } from "../../../utils/comparePokemons";
 import { ComparedPokemon } from "../../../@types";
 import { pokemonApi } from "../../../services/pokemonClient";
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let { pokename } = req.query;
   const { dailyPokemon } = req.body;

@@ -14,6 +14,7 @@ import Header from '../components/Header';
 import { pokemonApi } from "../services/pokemonClient";
 import { parseCookies } from 'nookies';
 
+
 interface ClassicProps {
   dailyPokemon: Pokemon;
   userCookies?: User
@@ -91,7 +92,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
           <ComparisonBody userAlreadyWon={userCookies?.alreadyWon ? true : false} onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
         </motion.div>
       </div>
-      {comparedPokemons.find((compared) => compared.comparison.win) && animationFinished && (
+      {(comparedPokemons.find((compared) => compared.comparison.win)) && (animationFinished || userCookies?.alreadyWon) && (
           <WinnerCard dailyPokemon={dailyPokemon} />
       )}
     </div>
@@ -101,7 +102,11 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
 export default Classic;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const dbPokemon = await prisma?.dailyPokemon.findFirst();
+  // const dbPokemon = await prisma?.dailyPokemon.findFirst();
+  const dbPokemon = {
+    name: "charmander",
+    id: 4
+  }
 
   const userCookies : User = {alreadyWon: false, classicPokemons: []};
   const { "pokedle.user": cookiesUser } = parseCookies(ctx);
