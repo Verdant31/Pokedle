@@ -114,7 +114,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   //   name: "charmander",
   //   id: 4
   // }
-
+  //  Test
   const userCookies : User = {alreadyWon: false, classicPokemons: []};
   const { "pokedle.user": cookiesUser } = parseCookies(ctx);
 
