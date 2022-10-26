@@ -35,7 +35,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
 
     return (
     <div className="flex w-full gap-x-2">
-        <motion.div className="w-28" {...animate(0.2)}>
+        <motion.div  {...animate(0.2)}>
             <div className="h-24 w-24 flex items-center justify-end">
                 <Image src={compared.chosenPokemon.image} height={900} width={900} alt="Picture of chosen pokemon" />
             </div>
