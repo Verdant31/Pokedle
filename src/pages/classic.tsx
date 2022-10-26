@@ -11,8 +11,8 @@ import ComparisonBody from '../components/ComparisonBody';
 import WinnerCard from '../components/WinnerCard';
 import { User, useUser } from '../context/UserContext';
 import Header from '../components/Header';
-import { pokemonApi } from "../services/pokemonClient";
 import { parseCookies } from 'nookies';
+import axios from 'axios';
 
 
 interface ClassicProps {
@@ -47,21 +47,27 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
   const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
 
   return (
-    <div className="flex flex-col items-center h-screen overflow-y-scroll scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
+    <div className="flex flex-col items-center h-screen overflow-y-scroll">
       <Header />
       <div>
-        <motion.div className="mt-8 text-center h-full mb-24 ">
+        <motion.div className="text-center h-full mb-24 items-center justify-center flex flex-col ">
           {userCookies?.alreadyWon 
             ? (
-              <a href="#winnercard" className="text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
+              <a href="#winnercard" className="px-4 text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
             )
             : (
               <>
                 <h1 className="text-xl">Guess todays Pokemon!!</h1>
                 <h1>Type any Pokemon to begin.</h1>
-                <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[300px] mx-auto justify-center mt-8 items-center ">
+                <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[230px]  justify-center mt-8 items-center ">
                   <div>
-                    <input value={pokeName} autoComplete='false' onChange={(e) => setPokeName(e.target.value)} list="pokemons" className="h-10 w-full p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none " />
+                    <input 
+                      value={pokeName} 
+                      autoComplete='false' 
+                      onChange={(e) => setPokeName(e.target.value)} 
+                      list="pokemons" 
+                      className="h-10 w-full p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none " 
+                    />
                     <datalist  id="pokemons" className="h-20">
                       {filteredPokemons && filteredPokemons.length > 0 
                         ? (
@@ -82,7 +88,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
                     alt="pokeball" 
                     className="w-8 h-8 absolute left-[16px] top-2" 
                   />
-                  <button type="submit" className="absolute  -right-12" >
+                  <button type="submit" className="absolute  -right-10" >
                     <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
                   </button>
                 </form>
@@ -102,18 +108,20 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
 export default Classic;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const dbPokemon = await prisma?.dailyPokemon.findFirst();
-  const dbPokemon = {
-    name: "charmander",
-    id: 4
-  }
+  const dbPokemon = await prisma?.dailyPokemon.findFirst();
+  console.log(new Date());
+  // const dbPokemon = {
+  //   name: "charmander",
+  //   id: 4
+  // }
 
   const userCookies : User = {alreadyWon: false, classicPokemons: []};
   const { "pokedle.user": cookiesUser } = parseCookies(ctx);
 
   if(!dbPokemon) return {props: {}};
-  const dailyPokemon = await pokemonApi.getPokemonByName(dbPokemon?.name).then(res => pokeDto(res));
-  
+  //I didnt use the pokenode-ts because it was taking to long to load the data
+  const dailyPokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${dbPokemon?.name}`).then(res => pokeDto(res.data));
+
   if(cookiesUser) {
     userCookies.alreadyWon = JSON.parse(cookiesUser).alreadyWon;
     await Promise.all(

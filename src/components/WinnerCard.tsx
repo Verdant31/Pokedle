@@ -39,17 +39,25 @@ const WinnerCard: React.FC<IWinnerCardProps> = ({dailyPokemon}) => {
 
 
   return (
-    <div className="mt-[500px] mb-36 ">
-      <div className="bg-yellow-500/90 mt-44 w-[480px] h-[520px] items-center flex flex-col rounded-md hover:scale-105 duration-300" id="winnercard">
-        <h1 className="text-4xl text-white font-bold mt-8">Well done!</h1>
-        <div className="flex space-x-4 items-center mt-8 ">
-          <Image  style={{paddingLeft: 40}} src={data?.image ? data?.image : dailyPokemon.image} height={200} width={200} alt="Picture of chosen pokemon" />
+    <div className="mt-[200px] mb-36 ">
+      <div className="bg-yellow-500/90 w-[300px] h-[420px] xsm:w-[400px] sm:w-[520px] sm:h-[520px] items-center flex flex-col rounded-md hover:scale-105 duration-300" id="winnercard">
+        <h1 className="text-xl xsm:text-3xl sm:text-4xl text-white font-bold mt-8">Well done!</h1>
+        <div className="flex items-center">
+          <div className="h-32 w-32 sm:h-44 sm:w-48 relative"> 
+            <Image
+              src={data?.image ? data?.image : dailyPokemon.image}
+              alt="Picture of chosen pokemon" 
+              layout="fill" 
+              objectFit="cover"
+              className="rounded-full"
+            />
+          </div>
           <p className="w-[150px]">Today&apos;s pokemon is <span className="text-lg font-bold">{dailyPokemon.name}.</span></p>
         </div>
-        <p className="mt-6">You are the {data?.dailyHitsCount}th to find the pokemon today</p>
+        <p className="mt-6 px-8 text-center xsm:text-xl">You are the {data?.dailyHitsCount}th to find the pokemon today</p>
         <div className="mt-8 text-center">
-          <p className="text-lg font-semibold">Next pokemon in:</p>
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-lg font-semibold xsm:text-xl">Next Pokemon in:</p>
+          <p className="text-3xl font-bold mt-4">
             {(timeUntilNextPokemon.hours < 10 && timeUntilNextPokemon.hours > 0) && "0"}{Math.round(timeUntilNextPokemon.hours)}:
             {(timeUntilNextPokemon.minutes < 10 && timeUntilNextPokemon.minutes> 0) && "0"}{}{Math.round(timeUntilNextPokemon.minutes)}:
             {(timeUntilNextPokemon.seconds < 10 && timeUntilNextPokemon.seconds> 0) && "0"}{Math.round(timeUntilNextPokemon.seconds)}
