@@ -13,6 +13,7 @@ import { User, useUser } from '../context/UserContext';
 import Header from '../components/Header';
 import { parseCookies } from 'nookies';
 import axios from 'axios';
+import { prisma } from '../server/db/client';
 
 
 interface ClassicProps {
@@ -108,8 +109,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
 export default Classic;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const dbPokemon = await prisma?.dailyPokemon.findFirst();
-  console.log(new Date());
+  const dbPokemon = await prisma.dailyPokemon.findFirst();
   // const dbPokemon = {
   //   name: "charmander",
   //   id: 4
