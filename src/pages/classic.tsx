@@ -38,17 +38,17 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
   const handleSearchFirstPokemon = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     if(pokeName.length > 0 ) {
+      setPokeName('')
       const { data } = await api.post("/pokemon/" + pokeName, {dailyPokemon})
       setComparedPokemons(oldState => [...oldState, data.compared])
       await addComparedPokemon(data.compared)
-      setPokeName('')
     }
   },[dailyPokemon, addComparedPokemon, pokeName])
 
   const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
 
   return (
-    <div className="flex flex-col items-center h-screen overflow-y-scroll">
+    <div className="flex flex-col items-center h-screen ">
       <Header />
       <div>
         <motion.div className="text-center h-full mb-24 items-center justify-center flex flex-col ">
@@ -60,14 +60,14 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
               <>
                 <h1 className="text-xl">Guess todays Pokemon!!</h1>
                 <h1>Type any Pokemon to begin.</h1>
-                <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[230px]  justify-center mt-8 items-center ">
+                <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[230px] lg:w-[490px]  justify-center mt-8 items-center ">
                   <div>
                     <input 
                       value={pokeName} 
                       autoComplete='false' 
                       onChange={(e) => setPokeName(e.target.value)} 
                       list="pokemons" 
-                      className="h-10 w-full p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none " 
+                      className="h-10 w-full lg:w-[380px] p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none " 
                     />
                     <datalist  id="pokemons" className="h-20">
                       {filteredPokemons && filteredPokemons.length > 0 
@@ -87,9 +87,9 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
                   <img 
                     src="/pokeball.png" 
                     alt="pokeball" 
-                    className="w-8 h-8 absolute left-[16px] top-2" 
+                    className="w-8 h-8 absolute left-[16px] lg:left-[70px] top-2" 
                   />
-                  <button type="submit" className="absolute  -right-10" >
+                  <button type="submit" className="absolute  -right-10 lg:-right-0" >
                     <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
                   </button>
                 </form>
@@ -109,11 +109,11 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
 export default Classic;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const dbPokemon = await prisma.dailyPokemon.findFirst();
-  // const dbPokemon = {
-  //   name: "charmander",
-  //   id: 4
-  // }
+  // const dbPokemon = await prisma.dailyPokemon.findFirst();
+  const dbPokemon = {
+    name: "charmander",
+    id: 4
+  }
   //  Test
   const userCookies : User = {alreadyWon: false, classicPokemons: []};
   const { "pokedle.user": cookiesUser } = parseCookies(ctx);
