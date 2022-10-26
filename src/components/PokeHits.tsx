@@ -43,11 +43,11 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
         <motion.div  className="w-24"{...animate(1)} >
             <div style={{backgroundColor: compared.comparison.abilities.color}} className={`h-20 w-24 flex items-center justify-center `}>
                 {compared.comparison.abilities.message === "None" 
-                    ? <p className="text-white text-sm font-semibold">None in common</p>
+                    ? <p className="text-white text-xs font-semibold">None in common</p>
                     : (
                         <div className="flex flex-col">
                             {compared.comparison.abilities.attributes.map((ability) => (
-                                <p  key={ability.name} className="text-white text-sm font-semibold " >{ability.name}</p>
+                                <p  key={ability.name} className="text-white text-xs font-semibold " >{ability.name}</p>
                             ))}
                         </div>
                     )
@@ -58,10 +58,10 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
         <motion.div {...animate(1.5)} className="">
             <div style={{backgroundColor: compared.comparison.moves.color}} className={`h-20  w-24 flex items-center justify-center`}>
                 {compared.comparison.moves.message === "None" 
-                    ? <p className="text-white text-sm font-semibold">None in common</p>
+                    ? <p className="text-white text-xs font-semibold">None in common</p>
                     : (
                         <div className="flex flex-col">
-                            <p className="text-white p-2 text-sm font-semibold " >{compared.chosenPokemon.moves.length} moves ({compared.comparison.moves.attributes.length} in common)</p>
+                            <p className="text-white p-2 text-xs font-semibold " >{compared.chosenPokemon.moves.length} moves ({compared.comparison.moves.attributes.length} in common)</p>
                         </div>
                     )
                 }
@@ -70,7 +70,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
         <motion.div {...animate(2.0)}className="w-24 ">
             <div style={{backgroundColor: compared.comparison.types.color}} className={`h-20 w-24 flex items-center justify-center `}>
                 {compared.comparison.types.message === "None" 
-                    ? <p className="text-white text-sm font-semibold">None in common</p>
+                    ? <p className="text-white text-xs font-semibold">None in common</p>
                     : (
                         <div className="flex flex-col ">
                             {compared.comparison.types.attributes.map((type) => (
@@ -87,7 +87,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
                     {compared.comparison.weight.message === "Less" && (<CaretDoubleLeft size={32} />)}
                     {compared.comparison.weight.message === "Higher" && (<CaretDoubleRight size={32} />)}
                     {compared.comparison.weight.message === "Equals" && (<Equals size={32} />)}
-                    <p className="text-white text-sm font-semibold " >{compared.comparison.weight.attributes}kg</p>
+                    <p className="text-white text-xs font-semibold " >{compared.comparison.weight.attributes}kg</p>
                 </div>
             </div>
         </motion.div>
@@ -97,7 +97,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
                     {compared.comparison.height.message === "Less" && (<CaretDoubleLeft size={32} />)}
                     {compared.comparison.height.message === "Higher" && (<CaretDoubleRight size={32} />)}
                     {compared.comparison.height.message === "Equals" && (<Equals size={32} />)}
-                    <p className="text-white text-sm font-semibold " >{compared.comparison.height.attributes}m</p>
+                    <p className="text-white text-xs font-semibold " >{compared.comparison.height.attributes}m</p>
                 </div>
             </div>
         </motion.div>
@@ -108,7 +108,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
                         {stat.message === "Less" && (<CaretDoubleLeft size={32} />)}
                         {stat.message === "Higher" && (<CaretDoubleRight size={32} />)}
                         {stat.message === "Equals" && (<Equals size={32} />)}
-                        <p className="text-white text-sm font-semibold " >{stat.attributes}</p>
+                        <p className="text-white text-xs font-semibold " >{stat.attributes}</p>
                     </div>
                 </div>
             </motion.div>

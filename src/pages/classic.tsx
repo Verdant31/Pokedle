@@ -11,7 +11,6 @@ import ComparisonBody from '../components/ComparisonBody';
 import WinnerCard from '../components/WinnerCard';
 import { User, useUser } from '../context/UserContext';
 import Header from '../components/Header';
-import { pokemonApi } from "../services/pokemonClient";
 import { parseCookies } from 'nookies';
 import axios from 'axios';
 
@@ -54,7 +53,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
         <motion.div className="text-center h-full mb-24 items-center justify-center flex flex-col ">
           {userCookies?.alreadyWon 
             ? (
-              <a href="#winnercard" className="text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
+              <a href="#winnercard" className="px-4 text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
             )
             : (
               <>
@@ -109,12 +108,12 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemon, userCookies}) => {
 export default Classic;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const dbPokemon = await prisma?.dailyPokemon.findFirst();
+  const dbPokemon = await prisma?.dailyPokemon.findFirst();
   console.log(new Date());
-  const dbPokemon = {
-    name: "charmander",
-    id: 4
-  }
+  // const dbPokemon = {
+  //   name: "charmander",
+  //   id: 4
+  // }
 
   const userCookies : User = {alreadyWon: false, classicPokemons: []};
   const { "pokedle.user": cookiesUser } = parseCookies(ctx);
