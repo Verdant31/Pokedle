@@ -19,6 +19,8 @@ const isSamePokemon = (comparedPokemon: Comparison) : boolean => {
 
 
 export const comparePokemons = (pokemon: Pokemon, dailyPokemon: Pokemon) : ComparedPokemon  => {
+    console.log("Função", pokemon.name);
+    console.log("Função", dailyPokemon.name);
     const commonAbilities = getCommonAbilities(pokemon.abilities, dailyPokemon.abilities);
     const commonMoves = getCommonAbilities(pokemon.moves, dailyPokemon.moves);
     const commonTypes = getCommonAbilities(pokemon.types, dailyPokemon.types); 

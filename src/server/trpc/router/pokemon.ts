@@ -1,10 +1,11 @@
 import axios from "axios";
-import { Pokemon } from "../../../@types";
+import { ComparedPokemon, Pokemon } from "../../../@types";
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { pokeDto } from "../../../utils/pokeDto";
 import { prisma } from "../../db/client";
 import { pokemonApi } from "../../../services/pokemonClient";
+import { api } from "../../../services/api";
 
 export const pokemon = router({
   getDailyHits: publicProcedure
@@ -22,9 +23,9 @@ export const pokemon = router({
       return pokemons;
   }),
   getPokemon: publicProcedure
-    .input(z.object({ name: z.string()}))
+    .input(z.object({ id: z.number()}))
     .query(async ({input}) => {
-      const pokemon : Pokemon = await pokemonApi.getPokemonByName(input.name).then((res) => pokeDto(res));
+      const pokemon : Pokemon = await pokemonApi.getPokemonById(input.id).then((res) => pokeDto(res));
       return pokemon;
     }),
   getDailyPokemon: publicProcedure
@@ -38,5 +39,16 @@ export const pokemon = router({
         return res.data.sprites.other.dream_world.front_default;
       });
       return image;
-    })
+    }),
+  getPreviousData: publicProcedure
+  .input(z.object({ pokemons: z.array(z.string()), dailyPokemonId: z.number()}))
+  .query(async ({input}) => {
+      const comparedPokemons =  await api.post("/pokemon/pokemons", {
+        dailyPokemonId: input.dailyPokemonId, 
+        pokemons: input.pokemons
+      }).then((res) => {
+        return res.data.result
+      });
+      return comparedPokemons;
+  })
 });

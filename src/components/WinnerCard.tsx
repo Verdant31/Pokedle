@@ -15,7 +15,6 @@ const WinnerCard: React.FC<IWinnerCardProps> = ({dailyPokemon}) => {
   const [timeUntilNextPokemon, setTimeUntilNextPokemon] = useState<MyDate>({hours: 0, minutes: 0, seconds: 0});
   const { data } = trpc.winner.getWinnerProps.useQuery({name: dailyPokemon.name})
 
-
   useEffect(() => {
     if(data && data.date) {
       setIsActive(true);
