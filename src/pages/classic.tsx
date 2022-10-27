@@ -54,12 +54,15 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
       await addComparedPokemon(data.compared)
     }
   },[pokeName, dailyPokemonId, addComparedPokemon])
+
+  const alreadyWon = comparedPokemons.find((compared) => compared.comparison.win) || userCookies.alreadyWon;
+  
   return (
     <div className="flex flex-col items-center h-screen ">
       <Header />
       <div>
         <motion.div className="text-center h-full mb-24 items-center justify-center flex flex-col ">
-          {userCookies?.alreadyWon 
+          {alreadyWon 
             ? (
               <a href="#winnercard" className="px-4 text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
             )
@@ -106,7 +109,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
           <ComparisonBody userAlreadyWon={userCookies?.alreadyWon ? true : false} onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
         </motion.div>
       </div>
-      {(comparedPokemons.find((compared) => compared.comparison.win)) &&  (animationFinished || userCookies?.alreadyWon) && (dailyPokemon) && (
+      {alreadyWon && animationFinished && (dailyPokemon) && (
           <WinnerCard dailyPokemon={dailyPokemon} />
       )}
     </div>
