@@ -64,10 +64,6 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
     }
   },[pokeName, dailyPokemonId, addComparedPokemon])
 
-  if(isLoading) {
-    return <Loading />
-  }
-  console.log(userCookies);
   return (
     <div className="flex flex-col items-center h-screen  scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
       <Header />
@@ -111,7 +107,14 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
               <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
             </button>
           </form>
-          <ComparisonBody userAlreadyWon={userCookies?.alreadyWon ? true : false} onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
+          {isLoading
+            ? (
+              <Loading text="Loading old answers" />
+            )
+            : (
+              <ComparisonBody userAlreadyWon={userCookies?.alreadyWon ? true : false} onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
+            )
+          }
         </motion.div>
       </div>
       {(userWon || animationFinished) && (dailyPokemon) && (
