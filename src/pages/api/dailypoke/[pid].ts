@@ -14,6 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       lastUpdate: new Date(),
       pokemonId: id
     }})
+    await prisma.dailyHits.update({where: {id: "6356ed31e23edc53d5635caf"}, data: {hits: 0}})
     res.status(200).json({message: 'Novo pokemon do dia adicionado com sucesso.'})
   }catch(err) {
     console.log(err);

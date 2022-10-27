@@ -38,7 +38,7 @@ const WinnerCard: React.FC<IWinnerCardProps> = ({dailyPokemon}) => {
 
 
   return (
-    <div className="mt-[200px] mb-36 ">
+    <div className="mt-[300px] sm:mt-[500px]  mb-36 ">
       <div className="bg-yellow-500/90 mb-36 w-[300px] h-[420px] xsm:w-[400px] sm:w-[520px] sm:h-[480px] items-center flex flex-col rounded-md hover:scale-105 duration-300" id="winnercard">
         <h1 className="text-xl xsm:text-3xl sm:text-4xl text-white font-bold mt-8">Well done!</h1>
         <div className="flex items-center">

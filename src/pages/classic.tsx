@@ -11,6 +11,7 @@ import WinnerCard from '../components/WinnerCard';
 import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
 import { parseCookies } from 'nookies';
+import Loading from '../components/Loading';
 
 type UserCookies = {
   alreadyWon: boolean;
@@ -24,7 +25,7 @@ interface ClassicProps {
 }
 
 const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
-
+  const [ userWon, setUserWon ] = useState(false);
   const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([]);
   const [ animationFinished, setAnimationFinished ] = useState<boolean>(false);
   const [ pokeName, setPokeName ] = useState('')
@@ -44,7 +45,12 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
   const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
 
 
-  const updateAnimationFinished = () => setAnimationFinished(true);
+  const updateAnimationFinished = () => {
+    setAnimationFinished(true)
+    if(comparedPokemons.find((compared) => compared.comparison.win) || userCookies.alreadyWon) {
+      setUserWon(true)
+    }
+  }
   const handleSearchFirstPokemon = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     if(pokeName.length > 0 ) {
@@ -55,14 +61,15 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
     }
   },[pokeName, dailyPokemonId, addComparedPokemon])
 
-  const alreadyWon = comparedPokemons.find((compared) => compared.comparison.win) || userCookies.alreadyWon;
-  
+  if(isLoading) {
+    return <Loading />
+  }
   return (
     <div className="flex flex-col items-center h-screen ">
       <Header />
       <div>
         <motion.div className="text-center h-full mb-24 items-center justify-center flex flex-col ">
-          {alreadyWon 
+          {userWon 
             ? (
               <a href="#winnercard" className="px-4 text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
             )
@@ -109,7 +116,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
           <ComparisonBody userAlreadyWon={userCookies?.alreadyWon ? true : false} onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
         </motion.div>
       </div>
-      {alreadyWon && animationFinished && (dailyPokemon) && (
+      {userWon && animationFinished && (dailyPokemon) && (
           <WinnerCard dailyPokemon={dailyPokemon} />
       )}
     </div>

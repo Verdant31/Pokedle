@@ -24,11 +24,10 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
     }
     const animationCompleted = (index: number) => {
         if(compared.comparison.win) {
-            if(index == 2) {
-                onAnimationComplete()
-            }  
             if(index == 3) {
-                document.getElementById('winnercard')?.scrollIntoView({ behavior: 'smooth'})
+                onAnimationComplete()
+                setTimeout(() => document.getElementById('winnercard')?.scrollIntoView({ behavior: 'smooth'}), 500)
+                
             }   
         }
     }
