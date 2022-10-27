@@ -9,11 +9,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!pid) return;
   try {
     const { id, name } = await pokemonApi.getPokemonById(Number(pid));
-    await prisma.dailyPokemon.create({data: {
-      name,
-      lastUpdate: new Date(),
-      pokemonId: id
-    }})
+    const oldPokemon = await prisma.dailyPokemon.findFirst({});
+
+    await prisma.dailyPokemon.update({
+      where: {
+        id: oldPokemon?.id
+      },
+      data: {
+        name,
+        lastUpdate: new Date(),
+        pokemonId: id
+      }
+    })
+
+    await prisma.dailyHits.delete({where: {id: oldPokemon?.id}});
     await prisma.dailyHits.update({where: {id: "6356ed31e23edc53d5635caf"}, data: {hits: 0}})
     res.status(200).json({message: 'Novo pokemon do dia adicionado com sucesso.'})
   }catch(err) {
