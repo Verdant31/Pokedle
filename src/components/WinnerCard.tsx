@@ -13,7 +13,7 @@ interface IWinnerCardProps {
 const WinnerCard: React.FC<IWinnerCardProps> = ({dailyPokemon}) => {
   const [ isActive, setIsActive ] = useState(false);
   const [timeUntilNextPokemon, setTimeUntilNextPokemon] = useState<MyDate>({hours: 0, minutes: 0, seconds: 0});
-  const { data } = trpc.winner.getWinnerProps.useQuery({name: dailyPokemon.name})
+  const { data, isLoading } = trpc.winner.getWinnerProps.useQuery({name: dailyPokemon.name})
 
   useEffect(() => {
     if(data && data.date) {
@@ -36,7 +36,6 @@ const WinnerCard: React.FC<IWinnerCardProps> = ({dailyPokemon}) => {
     }
   }, [isActive, timeUntilNextPokemon])
 
-
   return (
     <div className="mt-[300px] sm:mt-[500px]  mb-36 ">
       <div className="bg-yellow-500/90 mb-36 w-[300px] h-[420px] xsm:w-[400px] sm:w-[520px] sm:h-[480px] items-center flex flex-col rounded-md hover:scale-105 duration-300" id="winnercard">
@@ -57,9 +56,18 @@ const WinnerCard: React.FC<IWinnerCardProps> = ({dailyPokemon}) => {
         <div className="mt-8 text-center">
           <p className="text-lg font-semibold xsm:text-xl">Next Pokemon in:</p>
           <p className="text-3xl font-bold mt-4">
-            {(timeUntilNextPokemon.hours < 10 && timeUntilNextPokemon.hours > 0) && "0"}{Math.round(timeUntilNextPokemon.hours)}:
-            {(timeUntilNextPokemon.minutes < 10 && timeUntilNextPokemon.minutes> 0) && "0"}{}{Math.round(timeUntilNextPokemon.minutes)}:
-            {(timeUntilNextPokemon.seconds < 10 && timeUntilNextPokemon.seconds> 0) && "0"}{Math.round(timeUntilNextPokemon.seconds)}
+            {isLoading 
+              ? (
+                <span className="text-3xl font-bold">Loading..</span>
+              )
+              : (
+                <>
+                  {(timeUntilNextPokemon.hours < 10 && timeUntilNextPokemon.hours > 0) && "0"}{Math.round(timeUntilNextPokemon.hours)}:
+                  {(timeUntilNextPokemon.minutes < 10 && timeUntilNextPokemon.minutes> 0) && "0"}{}{Math.round(timeUntilNextPokemon.minutes)}:
+                  {(timeUntilNextPokemon.seconds < 10 && timeUntilNextPokemon.seconds> 0) && "0"}{Math.round(timeUntilNextPokemon.seconds)}
+                </>
+              )
+            }
           </p>
         </div>
       </div>

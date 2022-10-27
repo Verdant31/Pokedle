@@ -26,15 +26,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     if(pokemons.length > 0) {
       myFunction().then((result) => {
+        console.log(result);
         res.status(200).json({message: 'Pokemon buscado com sucesso.', result})
       })
     }else {
+      console.log("opa fion2");
         res.status(200).json({message: 'Pokemon buscado com sucesso.', result: []})
     }
-    
-    // const chosenPokemon = await pokemonApi.getPokemonByName(pokename).then((res) => pokeDto(res))
-
-    // const compared : ComparedPokemon = comparePokemons(chosenPokemon, dailyPokemon);
   }catch(err) {
     console.log(err);
   }

@@ -11,9 +11,9 @@ const Home: React.FunctionComponent = () => {
     <div>
       <Header />
         <div className="max-w-2xl m-auto">
-          <h1 className="text-md  px-4 mt-8 font-semibold text-center md:text-2xl md:mt-12 md:mb-12 ">Adivinhe pokemons de todas as gerações!</h1>
+          <h1 className="text-md  px-4 mt-8 font-semibold text-center md:text-2xl md:mt-12 md:mb-12 ">Guess pokemons from all generations!</h1>
           <div className="flex flex-col mx-6 mt-6 space-y-6  md:mx-auto ">
-            <CardSelection onClick={() => handleNavigate('/classic')} title="Clássico" subtitle="Receba dicas a cada tentativa" />
+            <CardSelection onClick={() => handleNavigate('/classic')} title="Classic" subtitle="Get clues on each try" />
           </div>
         </div>
     </div>
