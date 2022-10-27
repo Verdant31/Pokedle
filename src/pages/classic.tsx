@@ -39,6 +39,9 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
     if(!isLoading && previousCompared.length > 0 && comparedPokemons.length === 0) {	
       setComparedPokemons(previousCompared)
     }
+    if(comparedPokemons.find((compared) => compared.comparison.win) || userCookies.alreadyWon) {
+      setUserWon(true)
+    }
   }, [isLoading, previousCompared])
 
   const { addComparedPokemon } = useUser();
@@ -64,59 +67,54 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
   if(isLoading) {
     return <Loading />
   }
+  console.log(userCookies);
   return (
-    <div className="flex flex-col items-center h-screen ">
+    <div className="flex flex-col items-center h-screen  scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
       <Header />
       <div>
-        <motion.div className="text-center h-full mb-24 items-center justify-center flex flex-col ">
-          {userWon 
-            ? (
-              <a href="#winnercard" className="px-4 text-lg font-semibold">You already guessed today &apos;s Pokemon.</a>
-            )
-            : (
-              <>
-                <h1 className="text-xl">Guess todays Pokemon!!</h1>
-                <h1>Type any Pokemon to begin.</h1>
-                <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[230px] lg:w-[490px]  justify-center mt-8 items-center ">
-                  <div>
-                    <input 
-                      value={pokeName} 
-                      autoComplete='false' 
-                      onChange={(e) => setPokeName(e.target.value)} 
-                      list="pokemons" 
-                      className="h-10 w-full lg:w-[380px] p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none " 
-                    />
-                    <datalist id="pokemons" className="h-20">
-                      {filteredPokemons && filteredPokemons.length > 0 
-                        ? (
-                          filteredPokemons.map(pokemon => (
-                            <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
-                          ))
-                        )
-                        : (
-                          pokemons.data?.map(pokemon => (
-                            <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
-                          ))
-                        )
-                      }
-                    </datalist>
-                  </div>
-                  <img 
-                    src="/pokeball.png" 
-                    alt="pokeball" 
-                    className="w-8 h-8 absolute left-[16px] lg:left-[70px] top-2" 
-                  />
-                  <button type="submit" className="absolute  -right-10 lg:-right-0" >
-                    <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
-                  </button>
-                </form>
-              </>
-            )
-          }
+        <motion.div className="sticky text-center h-full mb-24 items-center justify-center flex flex-col ">
+          <h1 className="text-xl">Guess todays Pokemon!!</h1>
+          <h1>Type any Pokemon to begin.</h1>
+          <form onSubmit={handleSearchFirstPokemon} className="flex relative w-[230px] lg:w-[490px]  justify-center mt-8 items-center ">
+            <div>
+              <input 
+                disabled={userWon}
+                value={pokeName} 
+                autoComplete='false' 
+                onChange={(e) => setPokeName(e.target.value)} 
+                list="pokemons" 
+                className={`h-10 w-full lg:w-[380px] p-6 bg-yellow-500 rounded-lg roudend-md pl-16 font-bold outline-none
+                  ${userWon ? 'cursor-not-allowed' : ''}
+                `} 
+              />
+              <datalist id="pokemons" className="h-20">
+                {filteredPokemons && filteredPokemons.length > 0 
+                  ? (
+                    filteredPokemons.map(pokemon => (
+                      <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
+                    ))
+                  )
+                  : (
+                    pokemons.data?.map(pokemon => (
+                      <option  key={pokemon.name} value={pokemon.name}>{pokemon.name}</option>
+                    ))
+                  )
+                }
+              </datalist>
+            </div>
+            <img 
+              src="/pokeball.png" 
+              alt="pokeball" 
+              className="w-8 h-8 absolute left-[16px] lg:left-[70px] top-2" 
+            />
+            <button type="submit" className="absolute  -right-10 lg:-right-0" >
+              <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
+            </button>
+          </form>
           <ComparisonBody userAlreadyWon={userCookies?.alreadyWon ? true : false} onAnimationComplete={updateAnimationFinished} comparedPokemons={comparedPokemons}/>
         </motion.div>
       </div>
-      {userWon && animationFinished && (dailyPokemon) && (
+      {(userWon || animationFinished) && (dailyPokemon) && (
           <WinnerCard dailyPokemon={dailyPokemon} />
       )}
     </div>

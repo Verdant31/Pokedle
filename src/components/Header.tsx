@@ -9,7 +9,7 @@ const Header: React.FC = () => {
     const { width } = useWindowSize();
     if(!width) return null;
     return (
-        <div className="inset gap-y-4 flex-col flex w-full justify-center items-center pt-6 ">
+        <div className="inset gap-y-4 flex-col flex w-full justify-center items-center pt-6  ">
             {width < 400 
                 ? (
                     <div className="flex">
