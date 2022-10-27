@@ -10,7 +10,7 @@ export type User = {
 interface UserContextProps {
     user: User | undefined;
     handleUserWin: () => void;
-    addComparedPokemon: (pokemon: ComparedPokemon) => Promise<void>;
+    addComparedPokemon: (pokemon: ComparedPokemon, dailyPokemonId?: number) => Promise<void>;
 }
 interface UserContextProvider {
     children: ReactNode
@@ -25,15 +25,16 @@ export default function UserContextProvider({children} : UserContextProvider) {
         setUser(oldState => ({...oldState, alreadyWon: true}))
     }
 
-    const addComparedPokemon = async (compared: ComparedPokemon) => {
+    const addComparedPokemon = async (compared: ComparedPokemon, dailyPokemonId?: number) => {
         const won = compared.comparison.win;
-        setCookie(undefined, 'pokedle.user', JSON.stringify(
-            {   alreadyWon: won, 
-                classicPokemons: [
-                    ...user.classicPokemons.map((pokemon) => (pokemon.chosenPokemon.name)), 
-                    compared.chosenPokemon.name
-                ]   
-            }));
+        setCookie(undefined, 'pokedle.user', JSON.stringify({   
+            alreadyWon: won, 
+            classicPokemons: [
+                ...user.classicPokemons.map((pokemon) => (pokemon.chosenPokemon.name)), 
+                compared.chosenPokemon.name
+            ],
+        }));
+        setCookie(undefined, 'pokedle.pokeoftheday', JSON.stringify({ pokeOfTheDay: dailyPokemonId }));
         setUser(oldState => ({...oldState, classicPokemons: [...oldState.classicPokemons, compared]}));
         if(won) {
             await api.get('/pokemon/incrementhits')            

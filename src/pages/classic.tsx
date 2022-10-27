@@ -60,7 +60,7 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
       setPokeName('')
       const { data } = await api.post("/pokemon/" + pokeName, {dailyPokemonId})
       setComparedPokemons(oldState => [...oldState, data.compared])
-      await addComparedPokemon(data.compared)
+      await addComparedPokemon(data.compared, dailyPokemon?.id)
     }
   },[pokeName, dailyPokemonId, addComparedPokemon])
 
@@ -132,8 +132,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { dailyPokemonId } = await api.get("/pokemon/getdailypokemonid").then(res =>  res.data);
   let userCookies : UserCookies = {alreadyWon: false, classicPokemons: [], dailyPokemonId: ''};
   const { "pokedle.user": cookiesUser } = parseCookies(ctx);
+  const { "pokedle.pokeoftheday" : oldDailyPokemonId } = parseCookies(ctx);
   if(cookiesUser) {
     userCookies = JSON.parse(cookiesUser);
+  }
+  if(oldDailyPokemonId) {
+    const oldPokemonId = JSON.parse(oldDailyPokemonId)["pokeOfTheDay"]
+    if(oldPokemonId !== dailyPokemonId) {
+      userCookies.alreadyWon = false;
+      userCookies.classicPokemons = [];
+    }
   }
   return {
     props: { 
