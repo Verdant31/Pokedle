@@ -23,6 +23,7 @@ const Home: React.FunctionComponent = () => {
             <h1 className="text-md  px-4 mt-8 font-semibold text-center md:text-2xl md:mt-12 md:mb-12 ">Guess pokemons from all generations!</h1>
             <div className="flex flex-col mx-6 mt-6 space-y-6  md:mx-auto ">
               <CardSelection onClick={() => handleNavigate('/classic')} title="Classic" subtitle="Get clues on each try" />
+              <CardSelection onClick={() => handleNavigate('/findout')} title="Find out" subtitle="Ask for clues" />
             </div>
           </div>
          )

@@ -50,5 +50,11 @@ export const pokemon = router({
         return res.data.result
       });
       return comparedPokemons;
-  })
+  }),
+  getRandomPokemon: publicProcedure
+    .query(async () => {
+      const randomPokemonId = Math.floor(Math.random() * 898) + 1;
+      const pokemon : Pokemon = await pokemonApi.getPokemonById(randomPokemonId).then((res) => pokeDto(res));
+      return pokemon;
+    })
 });

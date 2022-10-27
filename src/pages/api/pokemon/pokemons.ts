@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const dailyPokemon = await pokemonApi.getPokemonById(dailyPokemonId).then((res) => pokeDto(res))
 
     const myFunction = async ( ) => {
-      return new Promise(async (resolve, reject) => {
+      return new Promise(async (resolve) => {
         await pokemons.forEach(async (pokemon: string) => {
           const pokemonData = await pokemonApi.getPokemonByName(pokemon).then((res) => pokeDto(res));
           const comparedPokemon = comparePokemons(pokemonData, dailyPokemon);

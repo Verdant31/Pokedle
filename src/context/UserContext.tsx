@@ -1,6 +1,6 @@
-import { createContext, ReactNode, useContext, useEffect, useState }  from 'react';
+import { createContext, ReactNode, useContext, useState }  from 'react';
 import { ComparedPokemon } from '../@types';
-import {  parseCookies, setCookie } from 'nookies';
+import {  setCookie } from 'nookies';
 import { api } from '../services/api';
 
 export type User = {
