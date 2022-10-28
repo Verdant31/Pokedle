@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ComparedPokemon, Pokemon } from "../../../@types";
+import { Pokemon } from "../../../@types";
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { pokeDto } from "../../../utils/pokeDto";
@@ -51,10 +51,4 @@ export const pokemon = router({
       });
       return comparedPokemons;
   }),
-  getRandomPokemon: publicProcedure
-    .query(async () => {
-      const randomPokemonId = Math.floor(Math.random() * 898) + 1;
-      const pokemon : Pokemon = await pokemonApi.getPokemonById(randomPokemonId).then((res) => pokeDto(res));
-      return pokemon;
-    })
 });

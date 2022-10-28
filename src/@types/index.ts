@@ -4,6 +4,29 @@ export type CommonAttributesOfComparedPokemon = {
     color: string
 }
 
+export type NameClues = {
+    firstLetter: string;
+    lastLetter: string;
+}
+
+export type AbilitiesClues = {
+    randomAbilityOne: string;
+    randomAbilityTwo?: string;
+}
+
+export type MovesClues = {
+    randomMoveOne: string;
+    randomMoveTwo?: string;
+}
+export type TypesClues = {
+    randomType: string;
+}
+
+export type StatsClues = {
+    hp: number;
+    attack: number;
+}
+
 export type CommonMainAttributesCompare = {
     attributes: Ability[] | Move[] | Type[],
     message: string

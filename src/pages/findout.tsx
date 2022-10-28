@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { motion } from 'framer-motion';
 import { LightbulbFilament, PaperPlaneRight } from 'phosphor-react';
-import { FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import CardTitle from '../components/CardTitle';
 import Header from '../components/Header';
 import { trpc } from '../utils/trpc';
@@ -9,6 +9,10 @@ import Image from 'next/image';
 import { pokemonApi } from '../services/pokemonClient';
 import { pokeDto } from '../utils/pokeDto';
 import { getClues } from '../utils/getClues';
+import { GetServerSideProps } from 'next';
+import { AbilitiesClues, MovesClues, NameClues, Pokemon, StatsClues, TypesClues } from '../@types';
+import Clue from '../components/Clue';
+import WinnerCardFindOut from '../components/WinnerCardFindOut';
 
 
 type ComparedPokemon = {
@@ -19,43 +23,51 @@ type ComparedPokemon = {
     win: boolean;
 }
 
-interface IFindOutProps {
-    a: string
+export type Clue =  {
+    type: string | undefined;
+    clue: NameClues | AbilitiesClues | StatsClues | TypesClues |  MovesClues;
 }
 
-const FindOut: React.FC<IFindOutProps> = ({}) => {
+interface FindOutProps {
+    clues: Clue[];
+    randomPokemon: Pokemon;
+}
+
+const FindOut: React.FC<FindOutProps> = ({clues, randomPokemon}) => {
+    const [ userWon, setUserWon ] = useState(false);
+    const [ serverClues, setServerClues ] = useState<Clue[]>(clues)
     const [ pokeName, setPokeName ] = useState('')
-    const [comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([]);
+    const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([]);
+    const [ userClues, setUserClues ] = useState<Clue[]>([]);
 
-    const { data: randomPokemon } = trpc.pokemon.getRandomPokemon.useQuery();
-
+    useEffect(() => {
+        if(comparedPokemons.find((compared) => compared.win)) {
+            setUserWon(true)
+            setTimeout(() => document.getElementById('winnercardfindout')?.scrollIntoView({ behavior: 'smooth'}), 1500)
+        }
+    }, [comparedPokemons])
     const handleSearchFirstPokemon = useCallback(async (e: FormEvent) => {
         e.preventDefault()
         if(pokeName.length > 0 && randomPokemon) {
-            let win = false;
             const chosen = await pokemonApi.getPokemonByName(pokeName.toLocaleLowerCase()).then((res) => pokeDto(res));
-            if(pokeName === randomPokemon.name) win = true;
             setComparedPokemons([...comparedPokemons, {
                 chosenPokemonPreview: {
-                    name: pokeName,
+                    name: pokeName.toLowerCase(),
                     image: chosen.image
                 },
-                win,
+                win: pokeName.toLowerCase() === randomPokemon.name,
             }])
             setPokeName('');
         }
     },[comparedPokemons, pokeName, randomPokemon])
 
     const handleGetClue = () => {
-        if(!randomPokemon) return;
-        const clues = getClues(randomPokemon)
-        const randomIndex = Math.floor(Math.random() * Object.entries(clues).length);
-        if(Object.entries(clues)) {
-            const randomClue = {
-                type: Object.entries(clues)[randomIndex]?.[0],
-                clues: Object.entries(clues)[randomIndex]?.[1]
-            };
-            console.log(randomClue)
+        if(userClues.length === serverClues.length) return;
+        const randomIndex = Math.floor(Math.random() * serverClues.length);
+        const randomClue = serverClues[randomIndex];
+        if(randomClue && !userClues.find(clue => clue.type === randomClue.type)) {
+            setUserClues(oldState=> [...oldState, randomClue]);
+            setServerClues(oldState => oldState.filter(clue => clue.type !== randomClue.type));
         }
     }
 
@@ -73,16 +85,25 @@ const FindOut: React.FC<IFindOutProps> = ({}) => {
                 <div className="sticky text-center h-full mb-24 items-center justify-center flex flex-col -mt-[12px] ">
                     <h1 className="text-xl">Guess the Pokemon!!</h1>
                     <h1>Type any Pokemon to begin.</h1>
-                    <button onClick={handleGetClue} className="mt-2 flex justify-center items-center mx-auto gap-2 p-[12px] px-[14px] rounded-md ">
+                    <button 
+                        onClick={handleGetClue} 
+                        className={`mt-2 flex justify-center items-center mx-auto gap-2 p-[12px] px-[14px] rounded-md 
+                        ${clues.length === userClues.length ? "cursor-not-allowed" : ""}`}
+                    >
                         <p className="text-lg font-semibold text-yellow-500 ">Get clue</p>
                         <LightbulbFilament size={24} weight="fill" color="#eab308"  />
                     </button>
                     <div className="mt-2" />
-                    {/* <span>
-                        Our Pokemon 
-                        <span className="font-bold underline mx-2">starts with...</span>
-                        <span className="font-bold text-yellow-500">P</span>
-                    </span> */}
+                    {userClues.length > 0 && (
+                        <>
+                            <span>Your clues (think wisely)...</span>
+                            <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center md:justify-center md:mt-2 md:gap-y-0 max-w-2xl">
+                                {userClues.map((clue) => (
+                                    <Clue clue={clue} key={clue.type} />
+                                ))}
+                            </div>
+                        </>
+                    )}
                     <form  onSubmit={handleSearchFirstPokemon} className="flex relative w-[230px] lg:w-[490px]  justify-center mt-8 items-center ">
                         <div>
                         <input 
@@ -116,7 +137,7 @@ const FindOut: React.FC<IFindOutProps> = ({}) => {
                             <PaperPlaneRight  size={32} weight="fill" color="#EAB308" className="cursor-pointer hover:scale-105 transition duration-300"/>
                         </button>
                     </form>
-                    <div className=" w-[300px] xsm:w-[350px] halfmd:w-[440px] sm:w-[540px] md:w-[650px] lg:w-[900px] xl:w-[120%] xl: mx-auto pb-12 overflow-x-scroll scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
+                    <div className=" w-[300px] xsm:w-[350px] halfmd:w-[440px] sm:w-[540px] md:w-[650px] lg:w-[900px] pb-12 overflow-x-scroll scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
                         <div className="flex w-full flex-col items-center ">
                             <div className="flex gap-x-8 mt-8 w-full justify-center">
                                 <CardTitle>Pokemon</CardTitle>
@@ -138,11 +159,25 @@ const FindOut: React.FC<IFindOutProps> = ({}) => {
                             ))}
                         </div>
                     </div>
-                    
                 </div>
             </div>
+            {randomPokemon && userWon && (
+                <WinnerCardFindOut randomPokemon={randomPokemon} />
+            )}
         </div>
     );
 };
 
 export default FindOut;
+
+export const getServerSideProps : GetServerSideProps = async () => {
+    const randomPokemonId = Math.floor(Math.random() * 898) + 1;
+    const randomPokemon : Pokemon = await pokemonApi.getPokemonById(randomPokemonId).then((res) => pokeDto(res));
+    const clues = getClues(randomPokemon)
+    return {
+        props: {
+            clues,
+            randomPokemon
+        }
+    }
+}
