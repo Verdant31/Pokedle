@@ -61,6 +61,12 @@ const FindOut: React.FC<FindOutProps> = ({clues, randomPokemon}) => {
         }
     },[comparedPokemons, pokeName, randomPokemon])
 
+    const pokemonAlreadyCompared = (pokemonName: string) => {
+        return comparedPokemons.filter((compared) => (
+           compared.chosenPokemonPreview.name.charAt(0).toUpperCase() + compared.chosenPokemonPreview.name.slice(1)) === pokemonName
+        ).length > 0
+      }
+
     const handleGetClue = () => {
         if(userClues.length === serverClues.length) return;
         const randomIndex = Math.floor(Math.random() * serverClues.length);
@@ -72,7 +78,9 @@ const FindOut: React.FC<FindOutProps> = ({clues, randomPokemon}) => {
     }
 
     const pokemons = trpc.pokemon.getAllPokemons.useQuery();
-    const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)) )
+    const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)) 
+    && pokemonAlreadyCompared(pokemon.name) === false)
+    
     const animation = {
         initial: {opacity: 0, scale: 0.5},
         transition: { delay: 0.5 },
