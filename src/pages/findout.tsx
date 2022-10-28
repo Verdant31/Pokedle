@@ -7,6 +7,8 @@ import Header from '../components/Header';
 import { trpc } from '../utils/trpc';
 import Image from 'next/image';
 import { pokemonApi } from '../services/pokemonClient';
+import { pokeDto } from '../utils/pokeDto';
+import { getClues } from '../utils/getClues';
 
 
 type ComparedPokemon = {
@@ -31,12 +33,12 @@ const FindOut: React.FC<IFindOutProps> = ({}) => {
         e.preventDefault()
         if(pokeName.length > 0 && randomPokemon) {
             let win = false;
-            const { sprites } = await pokemonApi.getPokemonByName(pokeName.charAt(0).toLocaleLowerCase() + pokeName.slice(1));
+            const chosen = await pokemonApi.getPokemonByName(pokeName.toLocaleLowerCase()).then((res) => pokeDto(res));
             if(pokeName === randomPokemon.name) win = true;
             setComparedPokemons([...comparedPokemons, {
                 chosenPokemonPreview: {
                     name: pokeName,
-                    image: sprites.front_default ? sprites.front_default : ""
+                    image: chosen.image
                 },
                 win,
             }])
@@ -45,7 +47,16 @@ const FindOut: React.FC<IFindOutProps> = ({}) => {
     },[comparedPokemons, pokeName, randomPokemon])
 
     const handleGetClue = () => {
-        console.log("opa");
+        if(!randomPokemon) return;
+        const clues = getClues(randomPokemon)
+        const randomIndex = Math.floor(Math.random() * Object.entries(clues).length);
+        if(Object.entries(clues)) {
+            const randomClue = {
+                type: Object.entries(clues)[randomIndex]?.[0],
+                clues: Object.entries(clues)[randomIndex]?.[1]
+            };
+            console.log(randomClue)
+        }
     }
 
     const pokemons = trpc.pokemon.getAllPokemons.useQuery();
@@ -56,7 +67,7 @@ const FindOut: React.FC<IFindOutProps> = ({}) => {
         animate: {opacity: 1, scale: 1}
     }
     return (
-        <div className="flex flex-col items-center h-screen  scrollbar scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
+        <div className="flex flex-col items-center h-screen scrollbar-track-zinc-700  scrollbar-thumb-yellow-500">
             <Header />
             <div>
                 <div className="sticky text-center h-full mb-24 items-center justify-center flex flex-col -mt-[12px] ">
