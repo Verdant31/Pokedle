@@ -7,7 +7,7 @@ In classic mode, every day a Pokemon will be randomly chosen as the Pokemon of t
 
 The result of the comparison can be Correct, Partially correct and Incorrect. (Intuitively, you win when all attributes are correct)
 
-<h4>Find out</h4
+<h4>Find out</h4>
 I created the Find out mode so that if the person enjoyed playing the game, they wouldn't have to wait until the next day to play again. So here, a Pokemon is chosen every time you reload the page or enter the game. The main difference between it and the Classic is that it does not have that elaborate comparison, you have only 5 tips that you can OPTIONALLY ask for. (Example in the second photo).<br>
 
 &nbsp;
