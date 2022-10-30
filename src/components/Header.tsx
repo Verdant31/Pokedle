@@ -17,7 +17,7 @@ const Header: React.FC = () => {
                             src="/bg-4.png" 
                             alt="Picture of the author" 
                             height={90} 
-                            width={100} 
+                            width={70} 
                         />
                         <Image
                             onClick={() => router.push('/')}

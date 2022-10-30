@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ComparedPokemon, Pokemon } from "../../../@types";
+import { Pokemon } from "../../../@types";
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { pokeDto } from "../../../utils/pokeDto";
@@ -50,5 +50,5 @@ export const pokemon = router({
         return res.data.result
       });
       return comparedPokemons;
-  })
+  }),
 });

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { motion } from 'framer-motion'
 import { GetServerSideProps } from 'next';
@@ -24,6 +25,8 @@ interface ClassicProps {
   userCookies: UserCookies
 }
 
+
+
 const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
   const [ userWon, setUserWon ] = useState(false);
   const [ comparedPokemons, setComparedPokemons ] = useState<ComparedPokemon[]>([]);
@@ -45,15 +48,25 @@ const Classic: React.FC<ClassicProps> = ({dailyPokemonId, userCookies}) => {
   }, [isLoading, previousCompared])
 
   const { addComparedPokemon } = useUser();
-  const filteredPokemons = pokemons?.data?.filter((pokemon) => pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1)))
 
+  const pokemonAlreadyCompared = (pokemonName: string) => {
+    return comparedPokemons.filter((compared) => (
+       compared.chosenPokemon.name.charAt(0).toUpperCase() + compared.chosenPokemon.name.slice(1)) === pokemonName
+    ).length > 0
+  }
 
+  const filteredPokemons = pokemons?.data?.filter((pokemon) => 
+    pokemon.name.includes(pokeName.charAt(0).toUpperCase() + pokeName.slice(1))
+    && pokemonAlreadyCompared(pokemon.name) === false
+  )
+  
   const updateAnimationFinished = () => {
     setAnimationFinished(true)
     if(comparedPokemons.find((compared) => compared.comparison.win) || userCookies.alreadyWon) {
       setUserWon(true)
     }
   }
+
   const handleSearchFirstPokemon = useCallback(async (e: FormEvent) => {
     e.preventDefault()
     if(pokeName.length > 0 ) {

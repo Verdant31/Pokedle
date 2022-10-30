@@ -9,6 +9,7 @@ interface IPokeHitsProps {
 }
 
 const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimationComplete, userAlreadyWon}) => {
+    console.log(compared.comparison.height.message);
     const animate = (transition: number) => {
         if(userAlreadyWon) {
             return;
@@ -85,8 +86,8 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
                 <div className="flex flex-col space-y-2 items-center">
                     {compared.comparison.weight.message === "Less" && (<CaretDoubleLeft size={32} />)}
                     {compared.comparison.weight.message === "Higher" && (<CaretDoubleRight size={32} />)}
-                    {compared.comparison.weight.message === "Equals" && (<Equals size={32} />)}
-                    <p className="text-white text-xs font-semibold " >{compared.comparison.weight.attributes}kg</p>
+                    {compared.comparison.weight.message === "Equal" && (<Equals size={32} />)}
+                    <p className="text-white text-xs font-semibold " >{(compared.comparison.weight.attributes/10).toFixed(1)}kg</p>
                 </div>
             </div>
         </motion.div>
@@ -95,8 +96,8 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
                 <div className="flex flex-col space-y-2">
                     {compared.comparison.height.message === "Less" && (<CaretDoubleLeft size={32} />)}
                     {compared.comparison.height.message === "Higher" && (<CaretDoubleRight size={32} />)}
-                    {compared.comparison.height.message === "Equals" && (<Equals size={32} />)}
-                    <p className="text-white text-xs font-semibold " >{compared.comparison.height.attributes}m</p>
+                    {compared.comparison.height.message === "Equal" && (<Equals size={32} />)}
+                    <p className="text-white text-xs font-semibold " >{(compared.comparison.height.attributes/10).toFixed(1)}m</p>
                 </div>
             </div>
         </motion.div>
@@ -106,7 +107,7 @@ const PokeHits: React.FunctionComponent<IPokeHitsProps> = ({compared, onAnimatio
                     <div className="flex flex-col space-y-2">
                         {stat.message === "Less" && (<CaretDoubleLeft size={32} />)}
                         {stat.message === "Higher" && (<CaretDoubleRight size={32} />)}
-                        {stat.message === "Equals" && (<Equals size={32} />)}
+                        {stat.message === "Equal" && (<Equals size={32} />)}
                         <p className="text-white text-xs font-semibold " >{stat.attributes}</p>
                     </div>
                 </div>
