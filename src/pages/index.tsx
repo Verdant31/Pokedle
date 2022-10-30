@@ -33,7 +33,7 @@ const Home: React.FunctionComponent = () => {
           </div>
          )
       }
-      <div className="justify-center mt-12 flex items-center gap-y-2 flex-col absolute bottom-16 left-[50%] -translate-x-1/2">
+      <div className="justify-center mt-12 flex items-center gap-y-2 flex-col absolute bottom-36 left-[50%] -translate-x-1/2">
         <a target="_blank" href="https://github.com/verdant31/pokedle" className="underline" rel="noreferrer">Github</a>
         <a onClick={toggleHtpModal} className="underline">How to play</a>
       </div>
