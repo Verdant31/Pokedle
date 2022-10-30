@@ -50,7 +50,7 @@ const HowToPlay: React.FC<IHowToPlayProps> = ({isOpen, toggleModal}) => {
                                     <span className="italic font-semibold"> Classic</span> and
                                     <span className="italic font-semibold"> Find out</span> ) are much the same.
                                     <div className="my-1"/>
-                                    <p>You will have to first chose a random Pokemon, and based on the
+                                    <p>You will have to first choose a random Pokemon, and based on the
                                     clues you will have to guess the Pokemon.</p>
                                     <div className="my-1"/>
                                     <p>The main indicators are:</p>
@@ -73,7 +73,7 @@ const HowToPlay: React.FC<IHowToPlayProps> = ({isOpen, toggleModal}) => {
                                 </p>
                                 <p>
                                     Example: 10 {"<<"} means that the pokemon you chosen has 10 as that
-                                    attribute and the one you are guessing has a smaller value.
+                                    attribute and the one you are guessing has a smaller value than 10.
                                 </p>
                             </div>
                         </div>
