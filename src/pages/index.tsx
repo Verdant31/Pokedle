@@ -3,16 +3,21 @@ import { useRouter } from "next/router";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
 import { useState } from "react";
+import MyModal from "../components/HowToPlay";
 
 const Home: React.FunctionComponent = () => {
+  const [ isHtpOpen, setIsHtpOpen ] = useState(false);
   const [ isLoading, setIsLoading ] = useState(false);
   const router = useRouter();
   const handleNavigate = (route: string) => {
     setIsLoading(true);
     router.push(route);
   }
+
+  const toggleHtpModal = () => setIsHtpOpen(!isHtpOpen);
+
   return (
-    <div>
+    <div className={`relative h-screen ${isHtpOpen ? "opacity-25" : ""}`}>
       <Header />
       {isLoading 
          ? (
@@ -28,6 +33,11 @@ const Home: React.FunctionComponent = () => {
           </div>
          )
       }
+      <div className="justify-center mt-12 flex items-center gap-y-2 flex-col absolute bottom-16 left-[50%] -translate-x-1/2">
+        <a target="_blank" href="https://github.com/verdant31/pokedle" className="underline" rel="noreferrer">Github</a>
+        <a onClick={toggleHtpModal} className="underline">How to play</a>
+      </div>
+      <MyModal toggleModal={toggleHtpModal} isOpen={isHtpOpen} />
     </div>
   );
 };
