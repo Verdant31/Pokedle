@@ -1,50 +1,57 @@
-# Create T3 App
+<h3>📚 Resume</h3>
+Pokedle is a dle style game, only Pokemons (A dle game is basically a guessing game, one of the best known games of this style that started the creation of several others is Wordle, in it you have to guess a word daily randomly generated 5-letter letter).
+<br>
+The game basically has two modes: "Classic" and "FInd out".
+<h4>Classic</h4>
+In classic mode, every day a Pokemon will be randomly chosen as the Pokemon of the day. In it, every time you try to guess the Pokemon, a card will appear on the screen, showing a comparison between the Pokemon you chose and the Pokemon of the day. This comparison is done by looking at Skills, Moves, Types, Weight, Height, HP, Attack and Speed. (Example in the first photo).
 
-This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
+The result of the comparison can be Correct, Partially correct and Incorrect. (Intuitively, you win when all attributes are correct)
 
-## Why are there `.js` files in here?
 
-As per [T3-Axiom #3](https://github.com/t3-oss/create-t3-app/tree/next#3-typesafety-isnt-optional), we take typesafety as a first class citizen. Unfortunately, not all frameworks and plugins support TypeScript which means some of the configuration files have to be `.js` files.
+<h4>Find out</h4
+I created the Find out mode so that if the person enjoyed playing the game, they wouldn't have to wait until the next day to play again. So here, a Pokemon is chosen every time you reload the page or enter the game. The main difference between it and the Classic is that it does not have this elaborate comparison of the Classic, only 5 tips that you can OPTIONALLY ask for. (Example in the second photo).<br>
+I performed the login screen and the loading screen, the client home is still pending.
+&nbsp;
+<br>
+![mock1](https://user-images.githubusercontent.com/71015476/198895499-ae8fd02f-8300-494e-84ba-bba085741d55.png)
+![mock1](https://user-images.githubusercontent.com/71015476/198895510-82a3b9c6-5c2b-41d4-b086-afb5a7860ef2.png)
 
-We try to emphasize that these files are javascript for a reason, by explicitly declaring its type (`cjs` or `mjs`) depending on what's supported by the library it is used by. Also, all the `js` files in this project are still typechecked using a `@ts-check` comment at the top.
+## 💻 About the Project
 
-## What's next? How do I make an app with this?
+* Design made with Tailwind CSS
+* Application created with NextJS
+* AWS Lambda to create CRON function
+* Prisma
+&nbsp;
 
-We try to keep this project as simple as possible, so you can start with the most basic configuration and then move on to more advanced configuration.
+## 🛠️ Techs
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+* [React](https://pt-br.reactjs.org/E)
+* [NextJS](https://nextjs.org/)
+* [TailwindCSS](https://tailwindcss.com)
+* [AWS](https://aws.amazon.com/)
+* [Prisma](https://www.prisma.io/)
+* [tRPC] (https://trpc.io/)
 
-- [Next-Auth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [TailwindCSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+&nbsp;
 
-Also checkout these awesome tutorials on `create-t3-app`.
+## ⚙️ Installation
+```
+# Open a terminal and type the command above
+$ git clone https://github.com/Verdant31/Pokedle.git
+```
 
-- [Build a Blog With the T3 Stack - tRPC, TypeScript, Next.js, Prisma & Zod](https://www.youtube.com/watch?v=syEWlxVFUrY)
-- [Build a Live Chat Application with the T3 Stack - TypeScript, Tailwind, tRPC](https://www.youtube.com/watch?v=dXRRY37MPuk)
-- [Build a full stack app with create-t3-app](https://www.nexxel.dev/blog/ct3a-guestbook)
-- [A first look at create-t3-app](https://dev.to/ajcwebdev/a-first-look-at-create-t3-app-1i8f)
+```
+# Access the application folder
+$ cd Pokedle
 
-## How do I deploy this?
+# Install the dependecies
+$ yarn
 
-### Vercel
+# Start the application
+$ yarn start
 
-We recommend deploying to [Vercel](https://vercel.com/?utm_source=t3-oss&utm_campaign=oss). It makes it super easy to deploy NextJs apps.
+```
+&nbsp;
 
-- Push your code to a GitHub repository.
-- Go to [Vercel](https://vercel.com/?utm_source=t3-oss&utm_campaign=oss) and sign up with GitHub.
-- Create a Project and import the repository you pushed your code to.
-- Add your environment variables.
-- Click **Deploy**
-- Now whenever you push a change to your repository, Vercel will automatically redeploy your website!
-
-### Docker
-
-You can also dockerize this stack and deploy a container. See the [Docker deployment page](https://create-t3-app-nu.vercel.app/en/deployment/docker) for details.
-
-## Useful resources
-
-Here are some resources that we commonly refer to:
-
-- [Protecting routes with Next-Auth.js](https://next-auth.js.org/configuration/nextjs#unstable_getserversession)
+<p align="center">Feito por João Piovesan 📗</p>
